@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from setuptools import setup
 
 setup(name='mac_alias',
       version='1.0.0',
       description='Generate/parse Mac OS Alias records from Python',
-      long_description="""
+      long_description=u"""
 ``mac_alias`` lets you generate or read binary Alias records from Python code.
 While it is written in pure Python, some OS X specific code is required to
 generate a proper Alias record for a given file, so this module currently
