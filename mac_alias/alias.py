@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+
 from __future__ import unicode_literals
+from __future__ import division
 
 import struct
 import datetime
@@ -437,6 +439,9 @@ class Alias (object):
                             b'\0'*10))
 
         # Excuse the odd order; we're copying Finder
+        
+        # - folder name
+        
         if self.target.folder_name:
             carbon_foldername = self.target.folder_name.replace(':','/')\
               .encode('utf-8')
@@ -445,20 +450,33 @@ class Alias (object):
             b.write(carbon_foldername)
             if len(carbon_foldername) & 1:
                 b.write(b'\0')
-
-        b.write(struct.pack(b'>hhQhhQ',
+        
+        # - high-res volume creation date
+        
+        b.write(struct.pack(b'>hhQ',
                 TAG_HIGH_RES_VOLUME_CREATION_DATE,
-                8, long(voldate * 65536),
+                8, long(voldate * 65536)))
+
+        # - high-res creation date
+        
+        b.write(struct.pack(b'>hhQ',
                 TAG_HIGH_RES_CREATION_DATE,
                 8, long(crdate * 65536)))
-
+        
+        # - cnid path
+        
         if self.target.cnid_path:
             cnid_path = struct.pack(b'>%uI' % len(self.target.cnid_path),
                                     *self.target.cnid_path)
             b.write(struct.pack(b'>hh', TAG_CNID_PATH,
                                  len(cnid_path)))
             b.write(cnid_path)
-
+        else:
+            # MacOS 10.10 Yosemite now puts in an empty record
+            b.write(struct.pack(b'>hh', TAG_CNID_PATH, 0))
+        
+        # - carbon path
+        
         if self.target.carbon_path:
             carbon_path=self.target.carbon_path.encode('utf-8')
             b.write(struct.pack(b'>hh', TAG_CARBON_PATH,
@@ -466,7 +484,9 @@ class Alias (object):
             b.write(carbon_path)
             if len(carbon_path) & 1:
                 b.write(b'\0')
-
+        
+        # - appleshare info
+        
         if self.volume.appleshare_info:
             ai = self.volume.appleshare_info
             if ai.zone:
@@ -482,12 +502,14 @@ class Alias (object):
                 if len(ai.server) & 1:
                     b.write(b'\0')
             if ai.username:
-                b.write(struct.pack(b'>hh', TAG_APPLESHARE_SERVER_NAME,
+                b.write(struct.pack(b'>hh', TAG_APPLESHARE_USERNAME,
                                      len(ai.username)))
                 b.write(ai.username)
                 if len(ai.username) & 1:
                     b.write(b'\0')
-
+        
+        # - driver name
+        
         if self.volume.driver_name:
             driver_name = self.volume.driver_name.encode('utf-8')
             b.write(struct.pack(b'>hh', TAG_DRIVER_NAME,
@@ -495,33 +517,43 @@ class Alias (object):
             b.write(driver_name)
             if len(driver_name) & 1:
                 b.write(b'\0')
-
+        
+        # - network mount info
+        
         if self.volume.network_mount_info:
             b.write(struct.pack(b'>hh', TAG_NETWORK_MOUNT_INFO,
                                 len(self.volume.network_mount_info)))
             b.write(self.volume.network_mount_info)
             if len(self.volume.network_mount_info) & 1:
                 b.write(b'\0')
-
+        
+        # - dialup info
+        
         if self.volume.dialup_info:
             b.write(struct.pack(b'>hh', TAG_DIALUP_INFO,
                                 len(self.volume.network_mount_info)))
             b.write(self.volume.network_mount_info)
             if len(self.volume.network_mount_info) & 1:
                 b.write(b'\0')
-
+        
+        # - unicode file name
+        
         utf16 = self.target.filename.replace(':','/').encode('utf-16-be')
         b.write(struct.pack(b'>hhh', TAG_UNICODE_FILENAME,
                             len(utf16) + 2,
-                            len(utf16) / 2))
+                            len(utf16) // 2))
         b.write(utf16)
-
+        
+        # - unicode volume name
+        
         utf16 = self.volume.name.replace(':','/').encode('utf-16-be')
         b.write(struct.pack(b'>hhh', TAG_UNICODE_VOLUME_NAME,
                             len(utf16) + 2,
-                            len(utf16) / 2))
+                            len(utf16) // 2))
         b.write(utf16)
-
+        
+        # - posix path
+        
         if self.target.posix_path:
             posix_path = self.target.posix_path.encode('utf-8')
             b.write(struct.pack(b'>hh', TAG_POSIX_PATH,
@@ -529,7 +561,9 @@ class Alias (object):
             b.write(posix_path)
             if len(posix_path) & 1:
                 b.write(b'\0')
-
+        
+        # - volume posix path
+        
         if self.volume.posix_path:
             posix_path = self.volume.posix_path.encode('utf-8')
             b.write(struct.pack(b'>hh', TAG_POSIX_PATH_TO_MOUNTPOINT,
@@ -537,7 +571,9 @@ class Alias (object):
             b.write(posix_path)
             if len(posix_path) & 1:
                 b.write(b'\0')
-
+        
+        # - volume dmd alias
+        
         if self.volume.disk_image_alias:
             d = self.volume.disk_image_alias.to_bytes()
             b.write(struct.pack(b'>hh', TAG_RECURSIVE_ALIAS_OF_DISK_IMAGE,
@@ -545,18 +581,26 @@ class Alias (object):
             b.write(d)
             if len(d) & 1:
                 b.write(b'\0')
-
+        
+        # - user home length
+        
         if self.target.user_home_prefix_len is not None:
             b.write(struct.pack(b'>hhh', TAG_USER_HOME_LENGTH_PREFIX,
                                 2, self.target.user_home_prefix_len))
-
+        
+        # -- extras
+        
         for t,v in self.extra:
             b.write(struct.pack(b'>hh', t, len(v)))
             b.write(v)
             if len(v) & 1:
                 b.write(b'\0')
-
+        
+        # -- end marker
+        
         b.write(struct.pack(b'>hh', -1, 0))
+        
+        # go back and write in the length
         
         blen = b.tell() - pos
         b.seek(pos + 4, os.SEEK_SET)
