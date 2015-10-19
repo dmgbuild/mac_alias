@@ -2,7 +2,7 @@
 from setuptools import setup
 
 setup(name='mac_alias',
-      version='1.0.0',
+      version='1.1.0',
       description='Generate/parse Mac OS Alias records from Python',
       long_description=u"""
 ``mac_alias`` lets you generate or read binary Alias records from Python code.
