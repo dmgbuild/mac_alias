@@ -24,6 +24,9 @@ Alias record reliably in future.
 This module contains code to parse and generate Alias records from a Pythonic
 equivalent data structure, and does not rely on the deprecated APIs.
 
+It also contains code to parse and generate Bookmark records, again from a
+Pythonic equivalent, and without relying on OS X APIs.
+
 Usage
 =====
 
@@ -44,6 +47,20 @@ Finally, to build an :class:`~mac_alias.Alias` for a file::
 It's probably best to resist the temptation to mess with the Alias class too
 much otherwise.
 
+Similarly, to parse a Bookmark record given binary data::
+
+  from mac_alias import Bookmark
+
+  b = Bookmark.from_bytes(my_data)
+
+To generate a binary Bookmark record::
+
+  b.to_bytes()
+
+And to build a :class:`~mac_alias.Bookmark` for a file::
+
+  Bookmark.for_file('/path/to/file.ext')
+
 Code Documentation
 ==================
 
@@ -55,10 +72,19 @@ Contents:
    mac_alias
 
 
+Binary Formats
+==============
+
+.. toctree::
+   :maxdepth: 2
+
+   alias_fmt
+   bookmark_fmt
+
+
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
