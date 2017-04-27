@@ -622,9 +622,9 @@ class Bookmark (object):
             kBookmarkVolumeProperties: volprops,
             kBookmarkCreationOptions: 512,
             kBookmarkWasFileReference: True,
-            kBookmarkUserName: 'alastair',
-            kBookmarkUID: 501,
-            }
+            kBookmarkUserName: 'unknown',
+            kBookmarkUID: 99,
+        }
 
         if relcount:
             toc[kBookmarkURLLengths] = url_lengths
