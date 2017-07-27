@@ -323,6 +323,9 @@ class Alias (object):
         """Create an :class:`Alias` that points at the specified file."""
         if sys.platform != 'darwin':
             raise Exception('Not implemented (requires special support)')
+
+        if not isinstance(path, bytes):
+            path = path.encode('utf-8')
         
         a = Alias()
 
@@ -337,7 +340,7 @@ class Alias (object):
         volinfo = osx.getattrlist(vol_path, attrs, 0)
 
         vol_crtime = volinfo[0]
-        vol_name = volinfo[1]
+        vol_name = volinfo[1].encode('utf-8')
         
         # Also grab various attributes of the file
         attrs = [(osx.ATTR_CMN_OBJTYPE
@@ -357,7 +360,7 @@ class Alias (object):
         
         dirname, filename = os.path.split(path)
 
-        if dirname == '' or dirname == '.':
+        if dirname == b'' or dirname == b'.':
             dirname = os.getcwd()
 
         foldername = os.path.basename(dirname)
@@ -382,10 +385,10 @@ class Alias (object):
         rel_path = os.path.relpath(path, vol_path)
 
         # Leave off the initial '/' if vol_path is '/' (no idea why)
-        if vol_path == '/':
+        if vol_path == b'/':
             a.target.posix_path = rel_path
         else:
-            a.target.posix_path = '/' + rel_path
+            a.target.posix_path = b'/' + rel_path
 
         # Construct the Carbon and CNID paths
         carbon_path = []
@@ -398,10 +401,11 @@ class Alias (object):
                 attrs = [osx.ATTR_CMN_FILEID, 0, 0, 0, 0]
                 info = osx.getattrlist(os.path.join(vol_path, head), attrs, 0)
                 cnid_path.append(info[0])
-            carbon_tail = tail.replace(':','/')
+            carbon_tail = tail.replace(b':',b'/')
             carbon_path.insert(0, carbon_tail)
             head, tail = os.path.split(head)
-        carbon_path = vol_name + ':' + ':\0'.join(carbon_path)
+
+        carbon_path = vol_name + b':' + b':\0'.join(carbon_path)
 
         a.target.carbon_path = carbon_path
         a.target.cnid_path = cnid_path
@@ -439,7 +443,7 @@ class Alias (object):
 
         # Excuse the odd order; we're copying Finder
         if self.target.folder_name:
-            carbon_foldername = self.target.folder_name.replace(':','/')\
+            carbon_foldername = self.target.folder_name.replace(b':',b'/')\
               .encode('utf-8')
             b.write(struct.pack(b'>hh', TAG_CARBON_FOLDER_NAME,
                                 len(carbon_foldername)))

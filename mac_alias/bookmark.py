@@ -4,7 +4,7 @@
 #  for the old-fashioned alias format.  The details of this format were
 #  reverse engineered; some things are still not entirely clear.
 #
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 
 import struct
 import uuid
@@ -13,7 +13,10 @@ import os
 import sys
 import pprint
 
-from urlparse import urljoin
+try:
+    from urlparse import urljoin
+except ImportError:
+    from urllib.parse import urljoin
 
 if sys.platform == 'darwin':
     from . import osx
@@ -292,7 +295,7 @@ class Bookmark (object):
         elif dtype == BMK_NULL:
             return None
 
-        print 'Unknown data type %08x' % typecode
+        print('Unknown data type %08x' % typecode)
         return (typecode, databytes)
 
     @classmethod
@@ -533,7 +536,7 @@ class Bookmark (object):
 
         # Find the filesystem
         st = osx.statfs(path)
-        vol_path = st.f_mntonname
+        vol_path = st.f_mntonname.decode('utf-8')
 
         # Grab its attributes
         attrs = [osx.ATTR_CMN_CRTIME,
@@ -580,6 +583,9 @@ class Bookmark (object):
 
         foldername = os.path.basename(dirname)
 
+        print(repr(path))
+        print(repr(vol_path))
+        
         rel_path = os.path.relpath(path, vol_path)
 
         # Build the path arrays
@@ -605,6 +611,12 @@ class Bookmark (object):
         fileprops = Data(struct.pack(b'<QQQ', flags, 0x0f, 0))
         volprops = Data(struct.pack(b'<QQQ', 0x81 | kCFURLVolumeSupportsPersistentIDs,
                                     0x13ef | kCFURLVolumeSupportsPersistentIDs, 0))
+
+        print(repr(name_path))
+        print(repr(cnid_path))
+        print(repr(fileprops))
+        print(repr(vol_path))
+        print(repr(vol_name))
 
         toc = {
             kBookmarkPath: name_path,
