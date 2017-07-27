@@ -1,5 +1,19 @@
 # -*- coding: utf-8 -*-
+import sys
 from setuptools import setup
+
+from setuptools.command.test import test as TestCommand
+
+class PyTest(TestCommand):
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+
+    def run_tests(self):
+        import pytest
+        errno = pytest.main(self.test_args)
+        sys.exit(errno)
 
 with open('README.rst', 'rb') as f:
     longdesc = f.read().decode('utf-8')
@@ -19,4 +33,8 @@ setup(name='mac_alias',
           'License :: OSI Approved :: MIT License',
           'Topic :: Desktop Environment',
           'Topic :: Software Development :: Libraries :: Python Modules'],
+      tests_require=['pytest'],
+      cmdclass={
+          'test': PyTest
+          },
       provides=['mac_alias'])
