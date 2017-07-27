@@ -19,7 +19,7 @@ with open('README.rst', 'rb') as f:
     longdesc = f.read().decode('utf-8')
 
 setup(name='mac_alias',
-      version='2.0.1',
+      version='2.0.2',
       description='Generate/parse Mac OS Alias records from Python',
       long_description=longdesc,
       author='Alastair Houghton',
