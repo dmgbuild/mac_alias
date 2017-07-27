@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup
 
-with open('README.rst', 'r') as f:
+with open('README.rst', 'rb') as f:
     longdesc = f.read().decode('utf-8')
 
 setup(name='mac_alias',
