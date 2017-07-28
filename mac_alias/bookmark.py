@@ -21,6 +21,18 @@ except ImportError:
 if sys.platform == 'darwin':
     from . import osx
 
+def iteritems(x):
+    return x.iteritems()
+
+try:
+    unicode
+except NameError:
+    unicode = str
+    long = int
+    xrange = range
+    def iteritems(x):
+        return x.items()
+
 from .utils import *
 
 BMK_DATA_TYPE_MASK    = 0xffffff00
@@ -307,8 +319,8 @@ class Bookmark (object):
 
         magic,size,dummy,hdrsize = struct.unpack(b'<4sIII', data[0:16])
 
-        if magic != 'book':
-            raise ValueError('Not a bookmark file (bad magic)')
+        if magic != b'book':
+            raise ValueError('Not a bookmark file (bad magic) %r' % magic)
 
         if hdrsize < 16:
             raise ValueError('Not a bookmark file (header size too short)')
@@ -445,7 +457,7 @@ class Bookmark (object):
             ioffset = offset + 8 + len(item) * 8
             result = [struct.pack(b'<II', len(item) * 8, BMK_DICT | BMK_ST_ONE)]
             enc = []
-            for k,v in item.iteritems():
+            for k,v in iteritems(item):
                 result.append(struct.pack(b'<I', ioffset))
                 ioffset, ienc = cls._encode_item(k, ioffset)
                 enc.append(ienc)
@@ -479,8 +491,8 @@ class Bookmark (object):
         for tid,toc in self.tocs:
             entries = []
 
-            for k,v in toc.iteritems():
-                if isinstance(k, basestring):
+            for k,v in iteritems(toc):
+                if isinstance(k, (str, unicode)):
                     noffset = offset
                     voffset, enc = self._encode_item(k, offset)
                     result.append(enc)
@@ -513,7 +525,7 @@ class Bookmark (object):
                                       0xfffffffe,
                                       tid,
                                       next_offset,
-                                      len(data) / 12))
+                                      len(data) // 12))
             result.append(data)
 
             offset += 20 + len(data)
@@ -647,8 +659,8 @@ class Bookmark (object):
         result = ['Bookmark([']
         for tid,toc in self.tocs:
             result.append('(0x%x, {\n' % tid)
-            for k,v in toc.iteritems():
-                if isinstance(k, basestring):
+            for k,v in iteritems(toc):
+                if isinstance(k, (str, unicode)):
                     kf = repr(k)
                 else:
                     kf = '0x%04x' % k
