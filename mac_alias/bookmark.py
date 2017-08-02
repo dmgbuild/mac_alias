@@ -317,6 +317,9 @@ class Bookmark (object):
         if len(data) < 16:
             raise ValueError('Not a bookmark file (too short)')
 
+        if isinstance(data, bytearray):
+            data = bytes(data)
+
         magic,size,dummy,hdrsize = struct.unpack(b'<4sIII', data[0:16])
 
         if magic != b'book':
@@ -595,9 +598,6 @@ class Bookmark (object):
 
         foldername = os.path.basename(dirname)
 
-        print(repr(path))
-        print(repr(vol_path))
-        
         rel_path = os.path.relpath(path, vol_path)
 
         # Build the path arrays
@@ -623,12 +623,6 @@ class Bookmark (object):
         fileprops = Data(struct.pack(b'<QQQ', flags, 0x0f, 0))
         volprops = Data(struct.pack(b'<QQQ', 0x81 | kCFURLVolumeSupportsPersistentIDs,
                                     0x13ef | kCFURLVolumeSupportsPersistentIDs, 0))
-
-        print(repr(name_path))
-        print(repr(cnid_path))
-        print(repr(fileprops))
-        print(repr(vol_path))
-        print(repr(vol_name))
 
         toc = {
             kBookmarkPath: name_path,
