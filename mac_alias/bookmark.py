@@ -508,7 +508,7 @@ class Bookmark (object):
             # binary search to find data
             entries.sort()
 
-            tocs.append((tid, b''.join([struct.pack('<III',k,o,0)
+            tocs.append((tid, b''.join([struct.pack(b'<III',k,o,0)
                                         for k,o in entries])))
 
         first_toc_offset = offset
