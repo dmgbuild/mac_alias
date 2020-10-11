@@ -232,7 +232,7 @@ class FinderInfo(Union):
                 ('folderInfo', FolderInfo)]
 
 extentrecord = diskextent * 8
-        
+
 vol_capabilities_set_t = c_uint * 4
 
 class vol_capabilities_attr_t(Structure):
@@ -402,7 +402,7 @@ _attr_info = (
     (4, ATTR_FORK_TOTALSIZE, sizeof(off_t)),
     (4, ATTR_FORK_ALLOCSIZE, sizeof(off_t))
     )
-    
+
 def _attrbuf_size(attrs):
     size = 4
     for entry in _attr_info:
@@ -746,7 +746,7 @@ def _decode_attrlist_result(buf, attrs, options):
         a = off_t.from_buffer(buf, offset)
         offset += sizeof(off_t)
         result.append(a.value)
-        
+
     return result
 
 # Sadly, ctypes.get_errno() seems not to work
@@ -755,7 +755,7 @@ __error.restype = POINTER(c_int)
 
 def _get_errno():
     return __error().contents.value
-                
+
 def getattrlist(path, attrs, options):
     if not isinstance(path, bytes):
         path = path.encode('utf-8')
