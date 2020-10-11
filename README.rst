@@ -25,4 +25,4 @@ bookmark format.
 
 See the documentation_ for more information.
 
-.. _documentation:: http://mac-alias.rtfd.org
+.. _documentation: http://mac-alias.rtfd.org
