@@ -10,7 +10,14 @@ Offset Size Contents
 ====== ==== ========
 0      4    Application specific four-character code
 4      2    Record size (must be >= 150 bytes)
-6      2    Version (we support version 2)
+6      2    Version (we support versions 2 and 3)
+====== ==== ========
+
+For version 2 aliases, this is followed by
+
+====== ==== ========
+Offset Size Contents
+====== ==== ========
 8      2    Alias kind (0 = file, 1 = folder)
 10     28   Volume name (Pascal-style string; first octet gives length)
 38     4    Volume date (seconds since 1904-01-01 00:00:00 UTC)
@@ -27,6 +34,22 @@ Offset Size Contents
 134    4    Volume attributes
 138    2    Volume filesystem ID
 140    10   Reserved (set to zero)
+====== ==== ========
+
+For version 3 aliases, we have instead
+
+====== ==== ========
+Offset Size Contents
+====== ==== ========
+8      2    Alias kind (0 = file, 1 = folder)
+10     8    Volume date (65536ths of a second since 1904-01-01 00:00:00 UTC)
+18     4    Filesystem type (typically 'H+\0\0' for HFS+)
+22     2    Disk type (0 = fixed, 1 = network, 2 = 400Kb, 3 = 800kb, 4 = 1.44MB, 5 = ejectable)
+24     4    CNID of containing folder
+28     4    Target CNID
+32     8    Target creation date (65536ths of a second since 1904-01-01 00:00:00 UTC)
+40     4    Volume attributes
+54     14   Reserved (set to zero)
 ====== ==== ========
 
 This record is optionally followed by tag-length-value data:

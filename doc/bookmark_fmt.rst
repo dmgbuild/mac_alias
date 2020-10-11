@@ -12,7 +12,7 @@ The record starts with a header:
 ====== ==== ========
 Offset Size Contents
 ====== ==== ========
-0      4    Magic number ('book')
+0      4    Magic number ('book' or 'alis')
 4      4    Total size in bytes
 8      4    Unknown (0x10040000) - might be a version?
 12     4    Size of header (48)
@@ -93,7 +93,7 @@ Currently known values are:
 ====== ======================= =====
 Key    Meaning                 Value
 ====== ======================= =====
-0x1003 Unknown                 Unknown
+0x1003 Target URL              A URL
 0x1004 Target path             Array of individual path components
 0x1005 Target CNID path        Array of CNIDs
 0x1010 Target flags            Data - see below
@@ -123,10 +123,13 @@ Key    Meaning                 Value
 0xd001 File reference flag     True if creating URL was a file reference URL
 0xd010 Creation options        Integer containing flags passed to CFURLCreateBookmarkData
 0xe003 URL length array        Array of integers - see below
-0xf017 Localized name?         String?
-0xf022 Unknown                 Unknown
-0xf080 Security extension      Unknown but looks like a hash with data and an access right
-0xf081 Unknown                 Unknown
+0xf017 Display name            String
+0xf020 Icon data               icns format data
+0xf021 Icon image              Data
+0xf022 Type binding info       dnib byte array
+0xf030 Bookmark creation time  64-bit float seconds since January 1st 2001
+0xf080 Sandbox RW extension    Looks like a hash with data and an access right
+0xf081 Sandbox RO extension    As above
 ====== ======================= =====
 
 The target flags (0x1010) are encoded as a Data object containing three 8-byte

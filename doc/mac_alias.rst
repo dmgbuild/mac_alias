@@ -42,6 +42,17 @@ Constants
 
    The volume signature for HFS+.
 
+.. py:data:: ALIAS_FILESYSTEM_UDF
+	     ALIAS_FILESYSTEM_FAT32
+	     ALIAS_FILESYSTEM_EXFAT
+	     ALIAS_FILESYSTEM_HFSX
+	     ALIAS_FILESYSTEM_HFSPLUS
+	     ALIAS_FILESYSTEM_FTP
+	     ALIAS_FILESYSTEM_NTFS
+	     ALIAS_FILESYSTEM_UNKNOWN
+
+   Values returned by the :attr:`~mac_alias.Alias.filesystem_type` attribute.
+
 .. py:data:: ALIAS_FIXED_DISK
              ALIAS_NETWORK_DISK
              ALIAS_400KB_FLOPPY_DISK
@@ -55,7 +66,8 @@ Constants
 
    A constant used where no CNID is present.
 
-.. py:data:: kBookmarkPath
+.. py:data:: kBookmarkURL
+	     kBookmarkPath
              kBookmarkCNIDPath
              kBookmarkFileProperties
              kBookmarkFileName
@@ -75,6 +87,14 @@ Constants
              kBookmarkWasFileReference
              kBookmarkCreationOptions
              kBookmarkURLLengths
+	     kBookmarkDisplayName
+	     kBookmarkIconData
+	     kBookmarkIconRef
+	     kBookmarkTypeBindingData
+	     kBookmarkCreationTime
+	     kBookmarkSandboxRwExtension
+	     kBookmarkSandboxRoExtension
+	     kBookmarkAliasData
              kBookmarkSecurityExtension
 
    Bookmark data keys.  A Bookmark holds a set of TOCs (Tables of Contents),
