@@ -279,12 +279,12 @@ class Alias (object):
             raise ValueError('Unsupported alias version %u' % version)
 
         if version == 2:
-            kind, volname, voldate, fstype, disktype,
-            folder_cnid, filename, cnid, crdate, creator_code, type_code,
+            kind, volname, voldate, fstype, disktype, \
+            folder_cnid, filename, cnid, crdate, creator_code, type_code, \
             levels_from, levels_to, volattrs, volfsid, reserved = \
                 struct.unpack(b'>h28pI2shI64pII4s4shhI2s10s', b.read(142))
         else:
-            kind, voldate_hr, fstype, disktype, folder_cnid, cnid, crdate_hr,
+            kind, voldate_hr, fstype, disktype, folder_cnid, cnid, crdate_hr, \
             volattrs, reserved = \
                 struct.unpack(b'>hQ4shIIQI14s', b.read(46))
 
