@@ -421,11 +421,19 @@ _fgetattrlist = libc.fgetattrlist
 _fgetattrlist.argtypes = [c_int, POINTER(attrlist), c_void_p, c_ulong, c_ulong]
 _fgetattrlist.restype = c_int
 
-_statfs = libc['statfs$INODE64']
+try:
+    _statfs = libc['statfs$INODE64']
+except (KeyError, AttributeError):
+    _statfs = libc['statfs']
+
 _statfs.argtypes = [c_char_p, POINTER(struct_statfs)]
 _statfs.restype = c_int
 
-_fstatfs = libc['fstatfs$INODE64']
+try:
+    _fstatfs = libc['fstatfs$INODE64']
+except (KeyError, AttributeError):
+    _fstatfs = libc['fstatfs']
+
 _fstatfs.argtypes = [c_int, POINTER(struct_statfs)]
 _fstatfs.restype = c_int
 
