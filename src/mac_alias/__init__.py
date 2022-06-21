@@ -1,3 +1,4 @@
+# flake8: noqa
 from .alias import *
 from .bookmark import *
 
@@ -47,5 +48,3 @@ __all__ = [
     'Data',
     'URL',
 ]
-
-
