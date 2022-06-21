@@ -15,10 +15,10 @@ mac_alias
    :alt: Maturity
 
 .. image:: https://img.shields.io/pypi/l/mac_alias.svg
-   :target: https://github.com/dmgbuild/mac_alias/blob/master/LICENSE
+   :target: https://github.com/dmgbuild/mac_alias/blob/main/LICENSE
    :alt: MIT License
 
-.. image:: https://github.com/dmgbuild/mac_alias/workflows/CI/badge.svg?branch=master
+.. image:: https://github.com/dmgbuild/mac_alias/workflows/CI/badge.svg?branch=main
    :target: https://github.com/dmgbuild/mac_alias/actions
    :alt: Build Status
 
