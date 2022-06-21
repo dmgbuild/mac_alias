@@ -78,12 +78,15 @@ jobs:
         tox -e py
 
   macOS-versions:
-    name: macOS version tests
+    # Only run this and subsequent steps on branches.
+    # `github.head_ref` only exists on pull requests.
+    if: github.head_ref
+    name: macOS compatibility test
     needs: smoke
     strategy:
       max-parallel: 4
       matrix:
-        python-version: ["macOS-11", "macOS-12"]
+        macOS-version: ["macOS-11", "macOS-12"]
     runs-on: ${{ matrix.macOS-version }}
     steps:
     - uses: actions/checkout@v1
