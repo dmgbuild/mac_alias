@@ -250,7 +250,7 @@ class fsid_t(Structure):
 
 
 class guid_t(Structure):
-    _fields_ = [('g_guid', c_byte*16)]
+    _fields_ = [('g_guid', c_byte * 16)]
 
 
 class kauth_ace(Structure):
@@ -408,7 +408,7 @@ int64_t = c_longlong
 uint64_t = c_ulonglong
 off_t = c_long
 size_t = c_ulong
-uuid_t = c_byte*16
+uuid_t = c_byte * 16
 
 NAME_MAX = 255
 PATH_MAX = 1024
@@ -585,7 +585,7 @@ def _decode_utf8_nul(sz):
     return sz.decode('utf-8')
 
 
-def _decode_attrlist_result(buf, attrs, options):  # noqa: C901
+def _decode_attrlist_result(buf, attrs, options):
     result = []
 
     assert len(buf) >= 4
@@ -604,7 +604,7 @@ def _decode_attrlist_result(buf, attrs, options):  # noqa: C901
     if attrs[0] & ATTR_CMN_NAME:
         a = attrreference_t.from_buffer(buf, offset)
         ofs = offset + a.attr_dataoffset
-        name = _decode_utf8_nul(buf[ofs:ofs+a.attr_length])
+        name = _decode_utf8_nul(buf[ofs:ofs + a.attr_length])
         offset += sizeof(attrreference_t)
         result.append(name)
     if attrs[0] & ATTR_CMN_DEVID:
@@ -715,10 +715,10 @@ def _decode_attrlist_result(buf, attrs, options):  # noqa: C901
         a = kauth_filesec.from_buffer(buf, ofs)
         result.append(a)
     if attrs[0] & ATTR_CMN_UUID:
-        result.append(uuid.UUID(bytes=buf[offset:offset+16]))
+        result.append(uuid.UUID(bytes=buf[offset:offset + 16]))
         offset += sizeof(guid_t)
     if attrs[0] & ATTR_CMN_GRPUUID:
-        result.append(uuid.UUID(bytes=buf[offset:offset+16]))
+        result.append(uuid.UUID(bytes=buf[offset:offset + 16]))
         offset += sizeof(guid_t)
     if attrs[0] & ATTR_CMN_FILEID:
         a = uint64_t.from_buffer(buf, offset)
@@ -731,7 +731,7 @@ def _decode_attrlist_result(buf, attrs, options):  # noqa: C901
     if attrs[0] & ATTR_CMN_FULLPATH:
         a = attrreference_t.from_buffer(buf, offset)
         ofs = offset + a.attr_dataoffset
-        path = _decode_utf8_nul(buf[ofs:ofs+a.attr_length])
+        path = _decode_utf8_nul(buf[ofs:ofs + a.attr_length])
         offset += sizeof(attrreference_t)
         result.append(path)
     if attrs[0] & ATTR_CMN_ADDEDTIME:
@@ -795,13 +795,13 @@ def _decode_attrlist_result(buf, attrs, options):  # noqa: C901
     if attrs[1] & ATTR_VOL_MOUNTPOINT:
         a = attrreference_t.from_buffer(buf, offset)
         ofs = offset + a.attr_dataoffset
-        path = _decode_utf8_nul(buf[ofs:ofs+a.attr_length])
+        path = _decode_utf8_nul(buf[ofs:ofs + a.attr_length])
         offset += sizeof(attrreference_t)
         result.append(path)
     if attrs[1] & ATTR_VOL_NAME:
         a = attrreference_t.from_buffer(buf, offset)
         ofs = offset + a.attr_dataoffset
-        name = _decode_utf8_nul(buf[ofs:ofs+a.attr_length])
+        name = _decode_utf8_nul(buf[ofs:ofs + a.attr_length])
         offset += sizeof(attrreference_t)
         result.append(name)
     if attrs[1] & ATTR_VOL_MOUNTFLAGS:
@@ -811,7 +811,7 @@ def _decode_attrlist_result(buf, attrs, options):  # noqa: C901
     if attrs[1] & ATTR_VOL_MOUNTEDDEVICE:
         a = attrreference_t.from_buffer(buf, offset)
         ofs = offset + a.attr_dataoffset
-        path = _decode_utf8_nul(buf[ofs:ofs+a.attr_length])
+        path = _decode_utf8_nul(buf[ofs:ofs + a.attr_length])
         offset += sizeof(attrreference_t)
         result.append(path)
     if attrs[1] & ATTR_VOL_ENCODINGSUSED:
@@ -823,7 +823,7 @@ def _decode_attrlist_result(buf, attrs, options):  # noqa: C901
         offset += sizeof(vol_capabilities_attr_t)
         result.append(a)
     if attrs[1] & ATTR_VOL_UUID:
-        result.append(uuid.UUID(bytes=buf[offset:offset+16]))
+        result.append(uuid.UUID(bytes=buf[offset:offset + 16]))
         offset += sizeof(uuid_t)
     if attrs[1] & ATTR_VOL_QUOTA_SIZE:
         a = off_t.from_buffer(buf, offset)
@@ -936,7 +936,7 @@ def _decode_attrlist_result(buf, attrs, options):  # noqa: C901
     if attrs[4] & ATTR_CMNEXT_RELPATH:
         a = attrreference_t.from_buffer(buf, offset)
         ofs = offset + a.attr_dataoffset
-        path = _decode_utf8_nul(buf[ofs:ofs+a.attr_length])
+        path = _decode_utf8_nul(buf[ofs:ofs + a.attr_length])
         offset += sizeof(attrreference_t)
         result.append(path)
     if attrs[4] & ATTR_CMNEXT_PRIVATESIZE:
@@ -950,7 +950,7 @@ def _decode_attrlist_result(buf, attrs, options):  # noqa: C901
     if attrs[4] & ATTR_CMNEXT_NOFIRMLINKPATH:
         a = attrreference_t.from_buffer(buf, offset)
         ofs = offset + a.attr_dataoffset
-        path = _decode_utf8_nul(buf[ofs:ofs+a.attr_length])
+        path = _decode_utf8_nul(buf[ofs:ofs + a.attr_length])
         offset += sizeof(attrreference_t)
         result.append(path)
     if attrs[4] & ATTR_CMNEXT_REALDEVID:

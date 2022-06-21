@@ -204,8 +204,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'mac_alias.tex', u'mac\\_alias Documentation',
-   u'Alastair Houghton', 'manual'),
+    ('index', 'mac_alias.tex', u'mac\\_alias Documentation', u'Alastair Houghton', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
