@@ -15,11 +15,11 @@ mac_alias
    :alt: Maturity
 
 .. image:: https://img.shields.io/pypi/l/mac_alias.svg
-   :target: https://github.com/al45tair/mac_alias/blob/master/LICENSE
+   :target: https://github.com/dmgbuild/mac_alias/blob/master/LICENSE
    :alt: MIT License
 
-.. image:: https://github.com/al45tair/mac_alias/workflows/CI/badge.svg?branch=master
-   :target: https://github.com/al45tair/mac_alias/actions
+.. image:: https://github.com/dmgbuild/mac_alias/workflows/CI/badge.svg?branch=master
+   :target: https://github.com/dmgbuild/mac_alias/actions
    :alt: Build Status
 
 .. image:: https://readthedocs.org/projects/mac_alias/badge/?version=latest
