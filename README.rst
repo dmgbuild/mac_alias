@@ -2,11 +2,29 @@
 mac_alias
 =========
 
-.. image:: https://travis-ci.org/al45tair/mac_alias.svg?branch=master
-    :target: https://travis-ci.org/al45tair/mac_alias
+.. image:: https://img.shields.io/pypi/pyversions/mac_alias.svg
+   :target: https://pypi.python.org/pypi/mac_alias
+   :alt: Python Versions
+
+.. image:: https://img.shields.io/pypi/v/mac_alias.svg
+   :target: https://pypi.python.org/pypi/mac_alias
+   :alt: PyPI Version
+
+.. image:: https://img.shields.io/pypi/status/mac_alias.svg
+   :target: https://pypi.python.org/pypi/mac_alias
+   :alt: Maturity
+
+.. image:: https://img.shields.io/pypi/l/mac_alias.svg
+   :target: https://github.com/al45tair/mac_alias/blob/master/LICENSE
+   :alt: MIT License
+
+.. image:: https://github.com/al45tair/mac_alias/workflows/CI/badge.svg?branch=master
+   :target: https://github.com/al45tair/mac_alias/actions
+   :alt: Build Status
 
 .. image:: https://readthedocs.org/projects/mac_alias/badge/?version=latest
-    :target: http://mac_alias.readthedocs.io/en/latest/?badge=latest
+   :target: http://mac_alias.readthedocs.io/en/latest/?badge=latest
+   :alt: Docs Build Status
 
 What is this?
 -------------
