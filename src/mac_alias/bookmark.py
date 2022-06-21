@@ -226,12 +226,12 @@ class Bookmark:
         if offset > len(data) - 8:
             raise ValueError('Offset out of range')
 
-        length, typecode = struct.unpack(b'<II', data[offset:offset+8])
+        length, typecode = struct.unpack(b'<II', data[offset:offset + 8])
 
         if len(data) - offset < 8 + length:
             raise ValueError('Data item truncated')
 
-        databytes = data[offset+8:offset+8+length]
+        databytes = data[offset + 8:offset + 8 + length]
 
         dsubtype = typecode & BMK_DATA_SUBTYPE_MASK
         dtype = typecode & BMK_DATA_TYPE_MASK
@@ -276,13 +276,13 @@ class Bookmark:
         elif dtype == BMK_ARRAY:
             result = []
             for aoff in range(offset + 8, offset + 8 + length, 4):
-                eltoff, = struct.unpack(b'<I', data[aoff:aoff+4])
+                eltoff, = struct.unpack(b'<I', data[aoff:aoff + 4])
                 result.append(cls._get_item(data, hdrsize, eltoff))
             return result
         elif dtype == BMK_DICT:
             result = {}
             for eoff in range(offset + 8, offset + 8 + length, 8):
-                keyoff, valoff = struct.unpack(b'<II', data[eoff:eoff+8])
+                keyoff, valoff = struct.unpack(b'<II', data[eoff:eoff + 8])
                 key = cls._get_item(data, hdrsize, keyoff)
                 val = cls._get_item(data, hdrsize, valoff)
                 result[key] = val
@@ -317,21 +317,18 @@ class Bookmark:
         if size != len(data):
             raise ValueError('Not a bookmark file (truncated)')
 
-        tocoffset, = struct.unpack(b'<I', data[hdrsize:hdrsize+4])
+        tocoffset, = struct.unpack(b'<I', data[hdrsize:hdrsize + 4])
 
         tocs = []
 
         while tocoffset != 0:
             tocbase = hdrsize + tocoffset
-            if (
-                tocoffset > size - hdrsize
-                or size - tocbase < 20
-            ):
+            if (tocoffset > size - hdrsize) or (size - tocbase < 20):
                 raise ValueError('TOC offset out of range')
 
             (
                 tocsize, tocmagic, tocid, nexttoc, toccount
-            ) = struct.unpack(b'<IIIII', data[tocbase:tocbase+20])
+            ) = struct.unpack(b'<IIIII', data[tocbase:tocbase + 20])
 
             if tocmagic != 0xfffffffe:
                 break
@@ -347,7 +344,7 @@ class Bookmark:
             toc = {}
             for n in range(0, toccount):
                 ebase = tocbase + 20 + 12 * n
-                eid, eoffset, edummy = struct.unpack(b'<III', data[ebase:ebase+12])
+                eid, eoffset, edummy = struct.unpack(b'<III', data[ebase:ebase + 12])
 
                 if eid & 0x80000000:
                     eid = cls._get_item(data, hdrsize, eid & 0x7fffffff)
@@ -386,19 +383,13 @@ class Bookmark:
         elif item is False:
             result = struct.pack(b'<II', 0, BMK_BOOLEAN | BMK_BOOLEAN_ST_FALSE)
             encoded = item.encode('utf-8')
-            result = (struct.pack(b'<II', len(encoded), BMK_STRING | BMK_ST_ONE)
-                      + encoded)
+            result = struct.pack(b'<II', len(encoded), BMK_STRING | BMK_ST_ONE) + encoded
         elif isinstance(item, bytes):
-            result = (struct.pack(b'<II', len(item), BMK_STRING | BMK_ST_ONE)
-                      + item)
+            result = struct.pack(b'<II', len(item), BMK_STRING | BMK_ST_ONE) + item
         elif isinstance(item, Data):
-            result = (struct.pack(b'<II', len(item.bytes),
-                                  BMK_DATA | BMK_ST_ONE)
-                      + bytes(item.bytes))
+            result = struct.pack(b'<II', len(item.bytes), BMK_DATA | BMK_ST_ONE) + bytes(item.bytes)
         elif isinstance(item, bytearray):
-            result = (struct.pack(b'<II', len(item),
-                                  BMK_DATA | BMK_ST_ONE)
-                      + bytes(item))
+            result = struct.pack(b'<II', len(item), BMK_DATA | BMK_ST_ONE) + bytes(item)
         elif isinstance(item, int) or isinstance(item, int):
             if item > -0x80000000 and item < 0x7fffffff:
                 result = struct.pack(b'<IIi', 4,
@@ -407,17 +398,17 @@ class Bookmark:
                 result = struct.pack(b'<IIq', 8,
                                      BMK_NUMBER | kCFNumberSInt64Type, item)
         elif isinstance(item, float):
-            result = struct.pack(b'<IId', 8,
-                                 BMK_NUMBER | kCFNumberFloat64Type, item)
+            result = struct.pack(b'<IId', 8, BMK_NUMBER | kCFNumberFloat64Type, item)
         elif isinstance(item, datetime.datetime):
             secs = item - osx_epoch
-            result = (
-                struct.pack(b'<II', 8, BMK_DATE | BMK_ST_ZERO)
-                + struct.pack(b'>d', float(secs.total_seconds()))
+            result = struct.pack(
+                b'<II', 8, BMK_DATE | BMK_ST_ZERO
+            ) + struct.pack(
+                b'>d', float(secs.total_seconds())
             )
+
         elif isinstance(item, uuid.UUID):
-            result = struct.pack(b'<II', 16, BMK_UUID | BMK_ST_ONE) \
-                     + item.bytes
+            result = struct.pack(b'<II', 16, BMK_UUID | BMK_ST_ONE) + item.bytes
         elif isinstance(item, URL):
             if item.base:
                 baseoff = offset + 16
@@ -548,11 +539,7 @@ class Bookmark:
         vol_path = st.f_mntonname.decode('utf-8')
 
         # Grab its attributes
-        attrs = [osx.ATTR_CMN_CRTIME,
-                 osx.ATTR_VOL_SIZE
-                 | osx.ATTR_VOL_NAME
-                 | osx.ATTR_VOL_UUID,
-                 0, 0, 0]
+        attrs = [osx.ATTR_CMN_CRTIME, osx.ATTR_VOL_SIZE | osx.ATTR_VOL_NAME | osx.ATTR_VOL_UUID, 0, 0, 0]
         volinfo = osx.getattrlist(vol_path, attrs, 0)
 
         vol_crtime = volinfo[0]
@@ -561,9 +548,7 @@ class Bookmark:
         vol_uuid = volinfo[3]
 
         # Also grab various attributes of the file
-        attrs = [(osx.ATTR_CMN_OBJTYPE
-                  | osx.ATTR_CMN_CRTIME
-                  | osx.ATTR_CMN_FILEID), 0, 0, 0, 0]
+        attrs = [(osx.ATTR_CMN_OBJTYPE | osx.ATTR_CMN_CRTIME | osx.ATTR_CMN_FILEID), 0, 0, 0, 0]
         info = osx.getattrlist(path, attrs, osx.FSOPT_NOFOLLOW)
 
         cnid = info[2]

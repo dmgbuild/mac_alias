@@ -44,13 +44,13 @@ ALIAS_FSTYPE_MAP = {
     b'H+': ALIAS_FILESYSTEM_HFSPLUS,
 
     # Version 3 aliases
-    b'BDcu':   ALIAS_FILESYSTEM_UDF,
-    b'BDIS':   ALIAS_FILESYSTEM_FAT32,
-    b'BDxF':   ALIAS_FILESYSTEM_EXFAT,
+    b'BDcu': ALIAS_FILESYSTEM_UDF,
+    b'BDIS': ALIAS_FILESYSTEM_FAT32,
+    b'BDxF': ALIAS_FILESYSTEM_EXFAT,
     b'HX\0\0': ALIAS_FILESYSTEM_HFSX,
     b'H+\0\0': ALIAS_FILESYSTEM_HFSPLUS,
     b'KG\0\0': ALIAS_FILESYSTEM_FTP,
-    b'NTcu':   ALIAS_FILESYSTEM_NTFS,
+    b'NTcu': ALIAS_FILESYSTEM_NTFS,
 }
 
 
@@ -279,7 +279,7 @@ class Alias:
         self.extra = list(extra)
 
     @classmethod
-    def _from_fd(cls, b):  # noqa: C901
+    def _from_fd(cls, b):
         appinfo, recsize, version = struct.unpack(b'>4shh', b.read(8))
 
         if recsize < 150:
@@ -424,11 +424,17 @@ class Alias:
         vol_name = encode_utf8(volinfo[1])
 
         # Also grab various attributes of the file
-        attrs = [(osx.ATTR_CMN_OBJTYPE
-                  | osx.ATTR_CMN_CRTIME
-                  | osx.ATTR_CMN_FNDRINFO
-                  | osx.ATTR_CMN_FILEID
-                  | osx.ATTR_CMN_PARENTID), 0, 0, 0, 0]
+        attrs = [
+            osx.ATTR_CMN_OBJTYPE
+            | osx.ATTR_CMN_CRTIME
+            | osx.ATTR_CMN_FNDRINFO
+            | osx.ATTR_CMN_FILEID
+            | osx.ATTR_CMN_PARENTID,
+            0,
+            0,
+            0,
+            0,
+        ]
         info = osx.getattrlist(path, attrs, osx.FSOPT_NOFOLLOW)
 
         if info[0] == osx.VDIR:
@@ -493,7 +499,7 @@ class Alias:
 
         return a
 
-    def _to_fd(self, b):  # noqa: C901
+    def _to_fd(self, b):
         # We'll come back and fix the length when we're done
         pos = b.tell()
         b.write(struct.pack(b'>4shh', self.appinfo, 0, self.version))
@@ -521,7 +527,7 @@ class Alias:
                                 self.target.levels_to,
                                 self.volume.attribute_flags,
                                 self.volume.fs_id,
-                                b'\0'*10))
+                                b'\0' * 10))
         else:
             b.write(struct.pack(b'>hQ4shIIQI14s',
                                 self.target.kind,
@@ -533,7 +539,7 @@ class Alias:
                                 int(crdate * 65536),
                                 self.volume.attribute_flags,
                                 self.volume.fs_id,
-                                b'\0'*14))
+                                b'\0' * 14))
 
         # Excuse the odd order; we're copying Finder
         if self.target.folder_name:
