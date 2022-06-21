@@ -290,14 +290,34 @@ class Alias:
 
         if version == 2:
             (
-                kind, volname, voldate, fstype, disktype,
-                folder_cnid, filename, cnid, crdate, creator_code, type_code,
-                levels_from, levels_to, volattrs, volfsid, reserved
+                kind,  # h
+                volname,  # 28p
+                voldate,  # I
+                fstype,  # 2s
+                disktype,  # h
+                folder_cnid,  # I
+                filename,  # 64p
+                cnid,  # I
+                crdate,  # I
+                creator_code,  # 4s
+                type_code,  # 4s
+                levels_from,  # h
+                levels_to,  # h
+                volattrs,  # I
+                volfsid,  # 2s
+                reserved  # 10s
             ) = struct.unpack(b'>h28pI2shI64pII4s4shhI2s10s', b.read(142))
         else:
             (
-                kind, voldate_hr, fstype, disktype,
-                folder_cnid, cnid, crdate_hr, volattrs, reserved
+                kind,  # h
+                voldate_hr,  # Q
+                fstype,  # 4s
+                disktype,  # h
+                folder_cnid,  # I
+                cnid,  # I
+                crdate_hr,  # Q
+                volattrs,  # I
+                reserved  # 14s
             ) = struct.unpack(b'>hQ4shIIQI14s', b.read(46))
 
             volname = b''
@@ -512,34 +532,42 @@ class Alias:
         if self.version == 2:
             # NOTE: crdate should be in local time, but that's system dependent
             #       (so doing so is ridiculous, and nothing could rely on it).
-            b.write(struct.pack(b'>h28pI2shI64pII4s4shhI2s10s',
-                                self.target.kind,
-                                carbon_volname, int(voldate),
-                                self.volume.fs_type,
-                                self.volume.disk_type,
-                                self.target.folder_cnid,
-                                carbon_filename,
-                                self.target.cnid,
-                                int(crdate),
-                                self.target.creator_code,
-                                self.target.type_code,
-                                self.target.levels_from,
-                                self.target.levels_to,
-                                self.volume.attribute_flags,
-                                self.volume.fs_id,
-                                b'\0' * 10))
+            b.write(
+                struct.pack(
+                    b'>h28pI2shI64pII4s4shhI2s10s',
+                    self.target.kind,  # h
+                    carbon_volname,  # 28p
+                    int(voldate),  # I
+                    self.volume.fs_type,  # 2s
+                    self.volume.disk_type,  # h
+                    self.target.folder_cnid,  # I
+                    carbon_filename,  # 64p
+                    self.target.cnid,  # I
+                    int(crdate),  # I
+                    self.target.creator_code,  # 4s
+                    self.target.type_code,  # 4s
+                    self.target.levels_from,  # h
+                    self.target.levels_to,  # h
+                    self.volume.attribute_flags,  # I
+                    self.volume.fs_id,  # 2s
+                    b'\0'*10  # 10s
+                )
+            )
         else:
-            b.write(struct.pack(b'>hQ4shIIQI14s',
-                                self.target.kind,
-                                int(voldate * 65536),
-                                self.volume.fs_type,
-                                self.volume.disk_type,
-                                self.target.folder_cnid,
-                                self.target.cnid,
-                                int(crdate * 65536),
-                                self.volume.attribute_flags,
-                                self.volume.fs_id,
-                                b'\0' * 14))
+            b.write(
+                struct.pack(
+                    b'>hQ4shIIQI14s',
+                    self.target.kind,  # h
+                    int(voldate * 65536),  # Q
+                    self.volume.fs_type,  # 4s
+                    self.volume.disk_type,  # h
+                    self.target.folder_cnid,  # I
+                    self.target.cnid,  # I
+                    int(crdate * 65536),  # Q
+                    self.volume.attribute_flags,  # I
+                    b'\0'*14  # 14s
+                )
+            )
 
         # Excuse the odd order; we're copying Finder
         if self.target.folder_name:
