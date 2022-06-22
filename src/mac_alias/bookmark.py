@@ -382,6 +382,7 @@ class Bookmark:
             result = struct.pack(b'<II', 0, BMK_BOOLEAN | BMK_BOOLEAN_ST_TRUE)
         elif item is False:
             result = struct.pack(b'<II', 0, BMK_BOOLEAN | BMK_BOOLEAN_ST_FALSE)
+        elif isinstance(item, str):
             encoded = item.encode('utf-8')
             result = struct.pack(b'<II', len(encoded), BMK_STRING | BMK_ST_ONE) + encoded
         elif isinstance(item, bytes):
@@ -390,13 +391,11 @@ class Bookmark:
             result = struct.pack(b'<II', len(item.bytes), BMK_DATA | BMK_ST_ONE) + bytes(item.bytes)
         elif isinstance(item, bytearray):
             result = struct.pack(b'<II', len(item), BMK_DATA | BMK_ST_ONE) + bytes(item)
-        elif isinstance(item, int) or isinstance(item, int):
+        elif isinstance(item, int):
             if item > -0x80000000 and item < 0x7fffffff:
-                result = struct.pack(b'<IIi', 4,
-                                     BMK_NUMBER | kCFNumberSInt32Type, item)
+                result = struct.pack(b'<IIi', 4, BMK_NUMBER | kCFNumberSInt32Type, item)
             else:
-                result = struct.pack(b'<IIq', 8,
-                                     BMK_NUMBER | kCFNumberSInt64Type, item)
+                result = struct.pack(b'<IIq', 8, BMK_NUMBER | kCFNumberSInt64Type, item)
         elif isinstance(item, float):
             result = struct.pack(b'<IId', 8, BMK_NUMBER | kCFNumberFloat64Type, item)
         elif isinstance(item, datetime.datetime):
