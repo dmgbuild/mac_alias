@@ -1,8 +1,8 @@
-include *.txt
 include tox.ini
+include pyproject.toml
+include .readthedocs.yaml
 recursive-include docs *.bat
 recursive-include docs *.py
 recursive-include docs *.rst
-recursive-include docs *.txt
 recursive-include docs Makefile
 recursive-include tests *.py

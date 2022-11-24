@@ -13,7 +13,6 @@ jobs:
       matrix:
         task:
         - flake8
-        - docs
         - package
     steps:
     - uses: actions/checkout@v3.0.2
