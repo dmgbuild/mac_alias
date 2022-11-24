@@ -88,4 +88,3 @@ Tag    Contents
 20     Recursive alias of disk image (an alias record)
 21     User home length prefix (two-byte integer, says how many directory levels to the user's home folder)
 ====== ========
-
