@@ -3,7 +3,7 @@ import datetime
 ZERO = datetime.timedelta(0)
 
 
-class UTC (datetime.tzinfo):
+class UTC(datetime.tzinfo):
     def utcoffset(self, dt):
         return ZERO
 
@@ -11,7 +11,7 @@ class UTC (datetime.tzinfo):
         return ZERO
 
     def tzname(self, dt):
-        return 'UTC'
+        return "UTC"
 
 
 utc = UTC()

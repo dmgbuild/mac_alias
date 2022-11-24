@@ -1,31 +1,31 @@
+import datetime
+import os
+import uuid
 from ctypes import (
+    POINTER,
+    Structure,
+    Union,
     byref,
+    c_byte,
+    c_char,
+    c_char_p,
     c_int,
+    c_long,
+    c_longlong,
+    c_short,
+    c_uint,
+    c_ulong,
+    c_ulonglong,
+    c_ushort,
+    c_void_p,
     cdll,
     create_string_buffer,
     sizeof,
-    POINTER,
-    c_uint,
-    Structure,
-    c_ulonglong,
-    c_char_p,
-    c_ulong,
-    c_void_p,
-    c_char,
-    c_byte,
-    c_long,
-    c_longlong,
-    Union,
-    c_ushort,
-    c_short,
 )
-import os
-import datetime
-import uuid
 
 from .utils import unix_epoch
 
-libc = cdll.LoadLibrary('/usr/lib/libc.dylib')
+libc = cdll.LoadLibrary("/usr/lib/libc.dylib")
 
 # Constants
 FSOPT_NOFOLLOW = 0x00000001
@@ -110,10 +110,10 @@ ATTR_CMN_ADDEDTIME = 0x10000000
 ATTR_CMN_ERROR = 0x20000000
 ATTR_CMN_DATA_PROTECT_FLAGS = 0x40000000
 ATTR_CMN_RETURNED_ATTRS = 0x80000000
-ATTR_CMN_ALL_ATTRS = 0xffffffff
+ATTR_CMN_ALL_ATTRS = 0xFFFFFFFF
 
-ATTR_CMN_VALIDMASK = 0xffffffff
-ATTR_CMN_SETMASK = 0x51c7ff00
+ATTR_CMN_VALIDMASK = 0xFFFFFFFF
+ATTR_CMN_SETMASK = 0x51C7FF00
 ATTR_CMN_VOLSETMASK = 0x00006700
 
 ATTR_VOL_FSTYPE = 0x00000001
@@ -139,7 +139,7 @@ ATTR_VOL_QUOTA_SIZE = 0x10000000
 ATTR_VOL_RESERVED_SIZE = 0x20000000
 ATTR_VOL_ATTRIBUTES = 0x40000000
 ATTR_VOL_INFO = 0x80000000
-ATTR_VOL_ALL_ATTRS = 0xf007ffff
+ATTR_VOL_ALL_ATTRS = 0xF007FFFF
 
 ATTR_DIR_LINKCOUNT = 0x00000001
 ATTR_DIR_ENTRYCOUNT = 0x00000002
@@ -149,9 +149,9 @@ DIR_MNTSTATUS_TRIGGER = 0x00000002
 ATTR_DIR_ALLOCSIZE = 0x00000008
 ATTR_DIR_IOBLOCKSIZE = 0x00000010
 ATTR_DIR_DATALENGTH = 0x00000020
-ATTR_DIR_ALL_ATTRS = 0x0000003f
+ATTR_DIR_ALL_ATTRS = 0x0000003F
 
-ATTR_DIR_VALIDMASK = 0x0000003f
+ATTR_DIR_VALIDMASK = 0x0000003F
 ATTR_DIR_SETMASK = 0x00000000
 
 ATTR_FILE_LINKCOUNT = 0x00000001
@@ -165,9 +165,9 @@ ATTR_FILE_DATALENGTH = 0x00000200
 ATTR_FILE_DATAALLOCSIZE = 0x00000400
 ATTR_FILE_RSRCLENGTH = 0x00001000
 ATTR_FILE_RSRCALLOCSIZE = 0x00002000
-ATTR_FILE_ALL_ATTRS = 0x000037ff
+ATTR_FILE_ALL_ATTRS = 0x000037FF
 
-ATTR_FILE_VALIDMASK = 0x000037ff
+ATTR_FILE_VALIDMASK = 0x000037FF
 ATTR_FILE_SETMASK = 0x00000020
 
 # These are deprecated
@@ -185,9 +185,9 @@ ATTR_CMNEXT_REALFSID = 0x00000080
 ATTR_CMNEXT_CLONEID = 0x00000100
 ATTR_CMNEXT_EXT_FLAGS = 0x00000200
 ATTR_CMNEXT_RECURSIVE_GENCOUNT = 0x00000400
-ATTR_CMNEXT_ALL_ATTRS = 0x000007fc
+ATTR_CMNEXT_ALL_ATTRS = 0x000007FC
 
-ATTR_CMNEXT_VALIDMASK = 0x000007fc
+ATTR_CMNEXT_VALIDMASK = 0x000007FC
 ATTR_CMNEXT_SETMASK = 0x00000000
 
 ATTR_FORK_VALIDMASK = 0x00000003
@@ -204,83 +204,87 @@ ATTR_FILE_RSRCEXTENTS = 0x00004000
 
 class attrlist(Structure):
     _fields_ = [
-        ('bitmapcount', c_ushort),
-        ('reserved', c_ushort),
-        ('commonattr', c_uint),
-        ('volattr', c_uint),
-        ('dirattr', c_uint),
-        ('fileattr', c_uint),
-        ('forkattr', c_uint)
+        ("bitmapcount", c_ushort),
+        ("reserved", c_ushort),
+        ("commonattr", c_uint),
+        ("volattr", c_uint),
+        ("dirattr", c_uint),
+        ("fileattr", c_uint),
+        ("forkattr", c_uint),
     ]
 
 
 class attribute_set_t(Structure):
     _fields_ = [
-        ('commonattr', c_uint),
-        ('volattr', c_uint),
-        ('dirattr', c_uint),
-        ('fileattr', c_uint),
-        ('forkattr', c_uint)
+        ("commonattr", c_uint),
+        ("volattr", c_uint),
+        ("dirattr", c_uint),
+        ("fileattr", c_uint),
+        ("forkattr", c_uint),
     ]
 
 
 class fsobj_id_t(Structure):
     _fields_ = [
-        ('fid_objno', c_uint),
-        ('fid_generation', c_uint)
+        ("fid_objno", c_uint),
+        ("fid_generation", c_uint),
     ]
 
 
 class timespec(Structure):
     _fields_ = [
-        ('tv_sec', c_long),
-        ('tv_nsec', c_long)
+        ("tv_sec", c_long),
+        ("tv_nsec", c_long),
     ]
 
 
 class attrreference_t(Structure):
     _fields_ = [
-        ('attr_dataoffset', c_int),
-        ('attr_length', c_uint)
+        ("attr_dataoffset", c_int),
+        ("attr_length", c_uint),
     ]
 
 
 class fsid_t(Structure):
-    _fields_ = [('val', c_uint * 2)]
+    _fields_ = [
+        ("val", c_uint * 2),
+    ]
 
 
 class guid_t(Structure):
-    _fields_ = [('g_guid', c_byte * 16)]
+    _fields_ = [
+        ("g_guid", c_byte * 16),
+    ]
 
 
 class kauth_ace(Structure):
     _fields_ = [
-        ('ace_applicable', guid_t),
-        ('ace_flags', c_uint)
+        ("ace_applicable", guid_t),
+        ("ace_flags", c_uint),
     ]
 
 
 class kauth_acl(Structure):
     _fields_ = [
-        ('acl_entrycount', c_uint),
-        ('acl_flags', c_uint),
-        ('acl_ace', kauth_ace * 128)
+        ("acl_entrycount", c_uint),
+        ("acl_flags", c_uint),
+        ("acl_ace", kauth_ace * 128),
     ]
 
 
 class kauth_filesec(Structure):
     _fields_ = [
-        ('fsec_magic', c_uint),
-        ('fsec_owner', guid_t),
-        ('fsec_group', guid_t),
-        ('fsec_acl', kauth_acl)
+        ("fsec_magic", c_uint),
+        ("fsec_owner", guid_t),
+        ("fsec_group", guid_t),
+        ("fsec_acl", kauth_acl),
     ]
 
 
 class diskextent(Structure):
     _fields_ = [
-        ('startblock', c_uint),
-        ('blockcount', c_uint)
+        ("startblock", c_uint),
+        ("blockcount", c_uint),
     ]
 
 
@@ -292,51 +296,53 @@ SInt32 = c_int
 
 class Point(Structure):
     _fields_ = [
-        ('x', SInt16),
-        ('y', SInt16)
+        ("x", SInt16),
+        ("y", SInt16),
     ]
 
 
 class Rect(Structure):
     _fields_ = [
-        ('x', SInt16),
-        ('y', SInt16),
-        ('w', SInt16),
-        ('h', SInt16)
+        ("x", SInt16),
+        ("y", SInt16),
+        ("w", SInt16),
+        ("h", SInt16),
     ]
 
 
 class FileInfo(Structure):
     _fields_ = [
-        ('fileType', OSType),
-        ('fileCreator', OSType),
-        ('finderFlags', UInt16),
-        ('location', Point),
-        ('reservedField', UInt16),
-        ('reserved1', SInt16 * 4),
-        ('extendedFinderFlags', UInt16),
-        ('reserved2', SInt16),
-        ('putAwayFolderID', SInt32)
+        ("fileType", OSType),
+        ("fileCreator", OSType),
+        ("finderFlags", UInt16),
+        ("location", Point),
+        ("reservedField", UInt16),
+        ("reserved1", SInt16 * 4),
+        ("extendedFinderFlags", UInt16),
+        ("reserved2", SInt16),
+        ("putAwayFolderID", SInt32),
     ]
 
 
 class FolderInfo(Structure):
     _fields_ = [
-        ('windowBounds', Rect),
-        ('finderFlags', UInt16),
-        ('location', Point),
-        ('reservedField', UInt16),
-        ('scrollPosition', Point),
-        ('reserved1', SInt32),
-        ('extendedFinderFlags', UInt16),
-        ('reserved2', SInt16),
-        ('putAwayFolderID', SInt32)
+        ("windowBounds", Rect),
+        ("finderFlags", UInt16),
+        ("location", Point),
+        ("reservedField", UInt16),
+        ("scrollPosition", Point),
+        ("reserved1", SInt32),
+        ("extendedFinderFlags", UInt16),
+        ("reserved2", SInt16),
+        ("putAwayFolderID", SInt32),
     ]
 
 
 class FinderInfo(Union):
-    _fields_ = [('fileInfo', FileInfo),
-                ('folderInfo', FolderInfo)]
+    _fields_ = [
+        ("fileInfo", FileInfo),
+        ("folderInfo", FolderInfo),
+    ]
 
 
 extentrecord = diskextent * 8
@@ -344,13 +350,17 @@ vol_capabilities_set_t = c_uint * 4
 
 
 class vol_capabilities_attr_t(Structure):
-    _fields_ = [('capabilities', vol_capabilities_set_t),
-                ('valid', vol_capabilities_set_t)]
+    _fields_ = [
+        ("capabilities", vol_capabilities_set_t),
+        ("valid", vol_capabilities_set_t),
+    ]
 
 
 class vol_attributes_attr_t(Structure):
-    _fields_ = [('validattr', attribute_set_t),
-                ('nativeattr', attribute_set_t)]
+    _fields_ = [
+        ("validattr", attribute_set_t),
+        ("nativeattr", attribute_set_t),
+    ]
 
 
 dev_t = c_uint
@@ -416,23 +426,25 @@ FSTYPE_MAX = 16
 
 
 class struct_statfs(Structure):
-    _fields_ = [('f_bsize', uint32_t),
-                ('f_iosize', int32_t),
-                ('f_blocks', uint64_t),
-                ('f_bfree', uint64_t),
-                ('f_bavail', uint64_t),
-                ('f_files', uint64_t),
-                ('f_ffree', uint64_t),
-                ('f_fsid', fsid_t),
-                ('f_owner', uid_t),
-                ('f_type', uint32_t),
-                ('f_flags', uint32_t),
-                ('f_fssubtype', uint32_t),
-                ('f_fstypename', c_char * FSTYPE_MAX),
-                ('f_mntonname', c_char * PATH_MAX),
-                ('f_mntfromname', c_char * PATH_MAX),
-                ('f_flags_ext', uint32_t),
-                ('f_reserved', uint32_t * 7)]
+    _fields_ = [
+        ("f_bsize", uint32_t),
+        ("f_iosize", int32_t),
+        ("f_blocks", uint64_t),
+        ("f_bfree", uint64_t),
+        ("f_bavail", uint64_t),
+        ("f_files", uint64_t),
+        ("f_ffree", uint64_t),
+        ("f_fsid", fsid_t),
+        ("f_owner", uid_t),
+        ("f_type", uint32_t),
+        ("f_flags", uint32_t),
+        ("f_fssubtype", uint32_t),
+        ("f_fstypename", c_char * FSTYPE_MAX),
+        ("f_mntonname", c_char * PATH_MAX),
+        ("f_mntfromname", c_char * PATH_MAX),
+        ("f_flags_ext", uint32_t),
+        ("f_reserved", uint32_t * 7),
+    ]
 
 
 # Calculate the maximum number of bytes required for the attribute buffer
@@ -471,7 +483,6 @@ _attr_info = (
     (0, ATTR_CMN_FULLPATH, sizeof(attrreference_t) + PATH_MAX),
     (0, ATTR_CMN_ADDEDTIME, sizeof(timespec)),
     (0, ATTR_CMN_DATA_PROTECT_FLAGS, sizeof(uint32_t)),
-
     # Volume attributes
     (1, ATTR_VOL_FSTYPE, sizeof(uint32_t)),
     (1, ATTR_VOL_SIGNATURE, sizeof(uint32_t)),
@@ -495,7 +506,6 @@ _attr_info = (
     (1, ATTR_VOL_QUOTA_SIZE, sizeof(off_t)),
     (1, ATTR_VOL_RESERVED_SIZE, sizeof(off_t)),
     (1, ATTR_VOL_ATTRIBUTES, sizeof(vol_attributes_attr_t)),
-
     # Directory attributes
     (2, ATTR_DIR_LINKCOUNT, sizeof(uint32_t)),
     (2, ATTR_DIR_ENTRYCOUNT, sizeof(uint32_t)),
@@ -503,7 +513,6 @@ _attr_info = (
     (2, ATTR_DIR_ALLOCSIZE, sizeof(off_t)),
     (2, ATTR_DIR_IOBLOCKSIZE, sizeof(uint32_t)),
     (2, ATTR_DIR_DATALENGTH, sizeof(off_t)),
-
     # File attributes
     (3, ATTR_FILE_LINKCOUNT, sizeof(uint32_t)),
     (3, ATTR_FILE_TOTALSIZE, sizeof(off_t)),
@@ -520,11 +529,9 @@ _attr_info = (
     (3, ATTR_FILE_RSRCLENGTH, sizeof(off_t)),
     (3, ATTR_FILE_RSRCALLOCSIZE, sizeof(off_t)),
     (3, ATTR_FILE_RSRCEXTENTS, sizeof(extentrecord)),
-
     # Fork attributes
     (4, ATTR_FORK_TOTALSIZE, sizeof(off_t)),
     (4, ATTR_FORK_ALLOCSIZE, sizeof(off_t)),
-
     # Extended common attributes
     (4, ATTR_CMNEXT_RELPATH, sizeof(attrreference_t) + PATH_MAX),
     (4, ATTR_CMNEXT_PRIVATESIZE, sizeof(off_t)),
@@ -542,8 +549,9 @@ def _attrbuf_size(attrs):
     for entry in _attr_info:
         if attrs[entry[0]] & entry[1]:
             if entry[2] is None:
-                raise ValueError('Unsupported attribute (%u, %x)'
-                                 % (entry[0], entry[1]))
+                raise ValueError(
+                    "Unsupported attribute (%u, %x)" % (entry[0], entry[1])
+                )
             size += entry[2]
     return size
 
@@ -557,19 +565,25 @@ _fgetattrlist.argtypes = [c_int, POINTER(attrlist), c_void_p, c_ulong, c_ulong]
 _fgetattrlist.restype = c_int
 
 try:
-    _statfs = libc['statfs$INODE64']
+    _statfs = libc["statfs$INODE64"]
 except (KeyError, AttributeError):
-    _statfs = libc['statfs']
+    _statfs = libc["statfs"]
 
-_statfs.argtypes = [c_char_p, POINTER(struct_statfs)]
+_statfs.argtypes = [
+    c_char_p,
+    POINTER(struct_statfs),
+]
 _statfs.restype = c_int
 
 try:
-    _fstatfs = libc['fstatfs$INODE64']
+    _fstatfs = libc["fstatfs$INODE64"]
 except (KeyError, AttributeError):
-    _fstatfs = libc['fstatfs']
+    _fstatfs = libc["fstatfs"]
 
-_fstatfs.argtypes = [c_int, POINTER(struct_statfs)]
+_fstatfs.argtypes = [
+    c_int,
+    POINTER(struct_statfs),
+]
 _fstatfs.restype = c_int
 
 
@@ -579,10 +593,10 @@ def _datetime_from_timespec(ts):
 
 
 def _decode_utf8_nul(sz):
-    nul = sz.find(b'\0')
+    nul = sz.find(b"\0")
     if nul > -1:
         sz = sz[:nul]
-    return sz.decode('utf-8')
+    return sz.decode("utf-8")
 
 
 def _decode_attrlist_result(buf, attrs, options):
@@ -604,7 +618,7 @@ def _decode_attrlist_result(buf, attrs, options):
     if attrs[0] & ATTR_CMN_NAME:
         a = attrreference_t.from_buffer(buf, offset)
         ofs = offset + a.attr_dataoffset
-        name = _decode_utf8_nul(buf[ofs:ofs + a.attr_length])
+        name = _decode_utf8_nul(buf[ofs : ofs + a.attr_length])
         offset += sizeof(attrreference_t)
         result.append(name)
     if attrs[0] & ATTR_CMN_DEVID:
@@ -699,26 +713,26 @@ def _decode_attrlist_result(buf, attrs, options):
 
         class kauth_acl(Structure):
             _fields_ = [
-                ('acl_entrycount', c_uint),
-                ('acl_flags', c_uint),
-                ('acl_ace', kauth_ace * ec)
+                ("acl_entrycount", c_uint),
+                ("acl_flags", c_uint),
+                ("acl_ace", kauth_ace * ec),
             ]
 
         class kauth_filesec(Structure):
             _fields_ = [
-                ('fsec_magic', c_uint),
-                ('fsec_owner', guid_t),
-                ('fsec_group', guid_t),
-                ('fsec_acl', kauth_acl)
+                ("fsec_magic", c_uint),
+                ("fsec_owner", guid_t),
+                ("fsec_group", guid_t),
+                ("fsec_acl", kauth_acl),
             ]
 
         a = kauth_filesec.from_buffer(buf, ofs)
         result.append(a)
     if attrs[0] & ATTR_CMN_UUID:
-        result.append(uuid.UUID(bytes=buf[offset:offset + 16]))
+        result.append(uuid.UUID(bytes=buf[offset : offset + 16]))
         offset += sizeof(guid_t)
     if attrs[0] & ATTR_CMN_GRPUUID:
-        result.append(uuid.UUID(bytes=buf[offset:offset + 16]))
+        result.append(uuid.UUID(bytes=buf[offset : offset + 16]))
         offset += sizeof(guid_t)
     if attrs[0] & ATTR_CMN_FILEID:
         a = uint64_t.from_buffer(buf, offset)
@@ -731,7 +745,7 @@ def _decode_attrlist_result(buf, attrs, options):
     if attrs[0] & ATTR_CMN_FULLPATH:
         a = attrreference_t.from_buffer(buf, offset)
         ofs = offset + a.attr_dataoffset
-        path = _decode_utf8_nul(buf[ofs:ofs + a.attr_length])
+        path = _decode_utf8_nul(buf[ofs : ofs + a.attr_length])
         offset += sizeof(attrreference_t)
         result.append(path)
     if attrs[0] & ATTR_CMN_ADDEDTIME:
@@ -795,13 +809,13 @@ def _decode_attrlist_result(buf, attrs, options):
     if attrs[1] & ATTR_VOL_MOUNTPOINT:
         a = attrreference_t.from_buffer(buf, offset)
         ofs = offset + a.attr_dataoffset
-        path = _decode_utf8_nul(buf[ofs:ofs + a.attr_length])
+        path = _decode_utf8_nul(buf[ofs : ofs + a.attr_length])
         offset += sizeof(attrreference_t)
         result.append(path)
     if attrs[1] & ATTR_VOL_NAME:
         a = attrreference_t.from_buffer(buf, offset)
         ofs = offset + a.attr_dataoffset
-        name = _decode_utf8_nul(buf[ofs:ofs + a.attr_length])
+        name = _decode_utf8_nul(buf[ofs : ofs + a.attr_length])
         offset += sizeof(attrreference_t)
         result.append(name)
     if attrs[1] & ATTR_VOL_MOUNTFLAGS:
@@ -811,7 +825,7 @@ def _decode_attrlist_result(buf, attrs, options):
     if attrs[1] & ATTR_VOL_MOUNTEDDEVICE:
         a = attrreference_t.from_buffer(buf, offset)
         ofs = offset + a.attr_dataoffset
-        path = _decode_utf8_nul(buf[ofs:ofs + a.attr_length])
+        path = _decode_utf8_nul(buf[ofs : ofs + a.attr_length])
         offset += sizeof(attrreference_t)
         result.append(path)
     if attrs[1] & ATTR_VOL_ENCODINGSUSED:
@@ -823,7 +837,7 @@ def _decode_attrlist_result(buf, attrs, options):
         offset += sizeof(vol_capabilities_attr_t)
         result.append(a)
     if attrs[1] & ATTR_VOL_UUID:
-        result.append(uuid.UUID(bytes=buf[offset:offset + 16]))
+        result.append(uuid.UUID(bytes=buf[offset : offset + 16]))
         offset += sizeof(uuid_t)
     if attrs[1] & ATTR_VOL_QUOTA_SIZE:
         a = off_t.from_buffer(buf, offset)
@@ -936,7 +950,7 @@ def _decode_attrlist_result(buf, attrs, options):
     if attrs[4] & ATTR_CMNEXT_RELPATH:
         a = attrreference_t.from_buffer(buf, offset)
         ofs = offset + a.attr_dataoffset
-        path = _decode_utf8_nul(buf[ofs:ofs + a.attr_length])
+        path = _decode_utf8_nul(buf[ofs : ofs + a.attr_length])
         offset += sizeof(attrreference_t)
         result.append(path)
     if attrs[4] & ATTR_CMNEXT_PRIVATESIZE:
@@ -950,7 +964,7 @@ def _decode_attrlist_result(buf, attrs, options):
     if attrs[4] & ATTR_CMNEXT_NOFIRMLINKPATH:
         a = attrreference_t.from_buffer(buf, offset)
         ofs = offset + a.attr_dataoffset
-        path = _decode_utf8_nul(buf[ofs:ofs + a.attr_length])
+        path = _decode_utf8_nul(buf[ofs : ofs + a.attr_length])
         offset += sizeof(attrreference_t)
         result.append(path)
     if attrs[4] & ATTR_CMNEXT_REALDEVID:
@@ -984,22 +998,25 @@ def _get_errno():
 
 def getattrlist(path, attrs, options):
     if not isinstance(path, bytes):
-        path = path.encode('utf-8')
+        path = path.encode("utf-8")
     attrs = list(attrs)
     if attrs[1]:
         attrs[1] |= ATTR_VOL_INFO
-    alist = attrlist(bitmapcount=5,
-                     commonattr=attrs[0],
-                     volattr=attrs[1],
-                     dirattr=attrs[2],
-                     fileattr=attrs[3],
-                     forkattr=attrs[4])
+    alist = attrlist(
+        bitmapcount=5,
+        commonattr=attrs[0],
+        volattr=attrs[1],
+        dirattr=attrs[2],
+        fileattr=attrs[3],
+        forkattr=attrs[4],
+    )
 
     bufsize = _attrbuf_size(attrs)
     buf = create_string_buffer(bufsize)
 
-    ret = _getattrlist(path, byref(alist), buf, bufsize,
-                       options | FSOPT_REPORT_FULLSIZE)
+    ret = _getattrlist(
+        path, byref(alist), buf, bufsize, options | FSOPT_REPORT_FULLSIZE
+    )
 
     if ret < 0:
         err = _get_errno()
@@ -1009,23 +1026,24 @@ def getattrlist(path, attrs, options):
 
 
 def fgetattrlist(fd, attrs, options):
-    if hasattr(fd, 'fileno'):
+    if hasattr(fd, "fileno"):
         fd = fd.fileno()
     attrs = list(attrs)
     if attrs[1]:
         attrs[1] |= ATTR_VOL_INFO
-    alist = attrlist(bitmapcount=5,
-                     commonattr=attrs[0],
-                     volattr=attrs[1],
-                     dirattr=attrs[2],
-                     fileattr=attrs[3],
-                     forkattr=attrs[4])
+    alist = attrlist(
+        bitmapcount=5,
+        commonattr=attrs[0],
+        volattr=attrs[1],
+        dirattr=attrs[2],
+        fileattr=attrs[3],
+        forkattr=attrs[4],
+    )
 
     bufsize = _attrbuf_size(attrs)
     buf = create_string_buffer(bufsize)
 
-    ret = _fgetattrlist(fd, byref(alist), buf, bufsize,
-                        options | FSOPT_REPORT_FULLSIZE)
+    ret = _fgetattrlist(fd, byref(alist), buf, bufsize, options | FSOPT_REPORT_FULLSIZE)
 
     if ret < 0:
         err = _get_errno()
@@ -1036,7 +1054,7 @@ def fgetattrlist(fd, attrs, options):
 
 def statfs(path):
     if not isinstance(path, bytes):
-        path = path.encode('utf-8')
+        path = path.encode("utf-8")
     result = struct_statfs()
     ret = _statfs(path, byref(result))
     if ret < 0:
@@ -1046,7 +1064,7 @@ def statfs(path):
 
 
 def fstatfs(fd):
-    if hasattr(fd, 'fileno'):
+    if hasattr(fd, "fileno"):
         fd = fd.fileno()
     result = struct_statfs()
     ret = _fstatfs(fd, byref(result))

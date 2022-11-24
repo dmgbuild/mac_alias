@@ -2,20 +2,20 @@
 #  for the old-fashioned alias format.  The details of this format were
 #  reverse engineered; some things are still not entirely clear.
 #
-import struct
-import uuid
 import datetime
 import os
+import struct
 import sys
+import uuid
 from urllib.parse import urljoin
 
-if sys.platform == 'darwin':
+if sys.platform == "darwin":
     from . import osx
 
 from .utils import osx_epoch
 
-BMK_DATA_TYPE_MASK = 0xffffff00
-BMK_DATA_SUBTYPE_MASK = 0x000000ff
+BMK_DATA_TYPE_MASK = 0xFFFFFF00
+BMK_DATA_SUBTYPE_MASK = 0x000000FF
 
 BMK_STRING = 0x0100
 BMK_DATA = 0x0200
@@ -26,7 +26,7 @@ BMK_ARRAY = 0x0600
 BMK_DICT = 0x0700
 BMK_UUID = 0x0800
 BMK_URL = 0x0900
-BMK_NULL = 0x0a00
+BMK_NULL = 0x0A00
 
 BMK_ST_ZERO = 0x0000
 BMK_ST_ONE = 0x0001
@@ -119,16 +119,18 @@ kCFURLVolumeSupportsRemoteEvents = 0x200000000000000
 kCFURLVolumeSupportsHiddenFiles = 0x400000000000000
 kCFURLVolumeSupportsDecmpFSCompression = 0x800000000000000
 kCFURLVolumeHas64BitObjectIDs = 0x1000000000000000
-kCFURLVolumePropertyFlagsAll = 0xffffffffffffffff
+kCFURLVolumePropertyFlagsAll = 0xFFFFFFFFFFFFFFFF
 
 BMK_URL_ST_ABSOLUTE = 0x0001
 BMK_URL_ST_RELATIVE = 0x0002
 
 # Bookmark keys
-kBookmarkURL = 0x1003   # A URL
-kBookmarkPath = 0x1004   # Array of path components
-kBookmarkCNIDPath = 0x1005   # Array of CNIDs
-kBookmarkFileProperties = 0x1010   # (CFURL rp flags, CFURL rp flags asked for, 8 bytes NULL)
+kBookmarkURL = 0x1003  # A URL
+kBookmarkPath = 0x1004  # Array of path components
+kBookmarkCNIDPath = 0x1005  # Array of CNIDs
+kBookmarkFileProperties = (
+    0x1010  # (CFURL rp flags, CFURL rp flags asked for, 8 bytes NULL)
+)
 kBookmarkFileName = 0x1020
 kBookmarkFileID = 0x1030
 kBookmarkFileCreationDate = 0x1040
@@ -137,32 +139,34 @@ kBookmarkFileCreationDate = 0x1040
 # = 0x1056   # ?
 # = 0x1101   # ?
 # = 0x1102   # ?
-kBookmarkTOCPath = 0x2000   # A list of (TOC id, ?) pairs
+kBookmarkTOCPath = 0x2000  # A list of (TOC id, ?) pairs
 kBookmarkVolumePath = 0x2002
 kBookmarkVolumeURL = 0x2005
 kBookmarkVolumeName = 0x2010
-kBookmarkVolumeUUID = 0x2011   # Stored (perversely) as a string
+kBookmarkVolumeUUID = 0x2011  # Stored (perversely) as a string
 kBookmarkVolumeSize = 0x2012
 kBookmarkVolumeCreationDate = 0x2013
-kBookmarkVolumeProperties = 0x2020   # (CFURL vp flags, CFURL vp flags asked for, 8 bytes NULL)
-kBookmarkVolumeIsRoot = 0x2030   # True if volume is FS root
-kBookmarkVolumeBookmark = 0x2040   # Embedded bookmark for disk image (TOC id)
-kBookmarkVolumeMountPoint = 0x2050   # A URL
+kBookmarkVolumeProperties = (
+    0x2020  # (CFURL vp flags, CFURL vp flags asked for, 8 bytes NULL)
+)
+kBookmarkVolumeIsRoot = 0x2030  # True if volume is FS root
+kBookmarkVolumeBookmark = 0x2040  # Embedded bookmark for disk image (TOC id)
+kBookmarkVolumeMountPoint = 0x2050  # A URL
 # = 0x2070
-kBookmarkContainingFolder = 0xc001   # Index of containing folder in path
-kBookmarkUserName = 0xc011   # User that created bookmark
-kBookmarkUID = 0xc012   # UID that created bookmark
-kBookmarkWasFileReference = 0xd001   # True if the URL was a file reference
-kBookmarkCreationOptions = 0xd010
-kBookmarkURLLengths = 0xe003   # See below
-kBookmarkDisplayName = 0xf017
-kBookmarkIconData = 0xf020
-kBookmarkIconRef = 0xf021
-kBookmarkTypeBindingData = 0xf022
-kBookmarkCreationTime = 0xf030
-kBookmarkSandboxRwExtension = 0xf080
-kBookmarkSandboxRoExtension = 0xf081
-kBookmarkAliasData = 0xfe00
+kBookmarkContainingFolder = 0xC001  # Index of containing folder in path
+kBookmarkUserName = 0xC011  # User that created bookmark
+kBookmarkUID = 0xC012  # UID that created bookmark
+kBookmarkWasFileReference = 0xD001  # True if the URL was a file reference
+kBookmarkCreationOptions = 0xD010
+kBookmarkURLLengths = 0xE003  # See below
+kBookmarkDisplayName = 0xF017
+kBookmarkIconData = 0xF020
+kBookmarkIconRef = 0xF021
+kBookmarkTypeBindingData = 0xF022
+kBookmarkCreationTime = 0xF030
+kBookmarkSandboxRwExtension = 0xF080
+kBookmarkSandboxRoExtension = 0xF081
+kBookmarkAliasData = 0xFE00
 
 # Alias for backwards compatibility
 kBookmarkSecurityExtension = kBookmarkSandboxRwExtension
@@ -186,7 +190,7 @@ class Data:
         self.bytes = bytes(bytedata)
 
     def __repr__(self):
-        return 'Data(%r)' % self.bytes
+        return "Data(%r)" % self.bytes
 
 
 class URL:
@@ -209,7 +213,7 @@ class URL:
             return urljoin(self.base.absolute, self.relative)
 
     def __repr__(self):
-        return 'URL(%r)' % self.absolute
+        return "URL(%r)" % self.absolute
 
 
 class Bookmark:
@@ -224,39 +228,39 @@ class Bookmark:
     def _get_item(cls, data, hdrsize, offset):
         offset += hdrsize
         if offset > len(data) - 8:
-            raise ValueError('Offset out of range')
+            raise ValueError("Offset out of range")
 
-        length, typecode = struct.unpack(b'<II', data[offset:offset + 8])
+        length, typecode = struct.unpack(b"<II", data[offset : offset + 8])
 
         if len(data) - offset < 8 + length:
-            raise ValueError('Data item truncated')
+            raise ValueError("Data item truncated")
 
-        databytes = data[offset + 8:offset + 8 + length]
+        databytes = data[offset + 8 : offset + 8 + length]
 
         dsubtype = typecode & BMK_DATA_SUBTYPE_MASK
         dtype = typecode & BMK_DATA_TYPE_MASK
 
         if dtype == BMK_STRING:
-            return databytes.decode('utf-8')
+            return databytes.decode("utf-8")
         elif dtype == BMK_DATA:
             return Data(databytes)
         elif dtype == BMK_NUMBER:
             if dsubtype == kCFNumberSInt8Type:
                 return ord(databytes[0])
             elif dsubtype == kCFNumberSInt16Type:
-                return struct.unpack(b'<h', databytes)[0]
+                return struct.unpack(b"<h", databytes)[0]
             elif dsubtype == kCFNumberSInt32Type:
-                return struct.unpack(b'<i', databytes)[0]
+                return struct.unpack(b"<i", databytes)[0]
             elif dsubtype == kCFNumberSInt64Type:
-                return struct.unpack(b'<q', databytes)[0]
+                return struct.unpack(b"<q", databytes)[0]
             elif dsubtype == kCFNumberFloat32Type:
-                return struct.unpack(b'<f', databytes)[0]
+                return struct.unpack(b"<f", databytes)[0]
             elif dsubtype == kCFNumberFloat64Type:
-                return struct.unpack(b'<d', databytes)[0]
+                return struct.unpack(b"<d", databytes)[0]
         elif dtype == BMK_DATE:
             # Yes, dates really are stored as *BIG-endian* doubles; everything
             # else is little-endian
-            secs = datetime.timedelta(seconds=struct.unpack(b'>d', databytes)[0])
+            secs = datetime.timedelta(seconds=struct.unpack(b">d", databytes)[0])
             return osx_epoch + secs
         elif dtype == BMK_BOOLEAN:
             if dsubtype == BMK_BOOLEAN_ST_TRUE:
@@ -267,22 +271,22 @@ class Bookmark:
             return uuid.UUID(bytes=databytes)
         elif dtype == BMK_URL:
             if dsubtype == BMK_URL_ST_ABSOLUTE:
-                return URL(databytes.decode('utf-8'))
+                return URL(databytes.decode("utf-8"))
             elif dsubtype == BMK_URL_ST_RELATIVE:
-                baseoff, reloff = struct.unpack(b'<II', databytes)
+                baseoff, reloff = struct.unpack(b"<II", databytes)
                 base = cls._get_item(data, hdrsize, baseoff)
                 rel = cls._get_item(data, hdrsize, reloff)
                 return URL(base, rel)
         elif dtype == BMK_ARRAY:
             result = []
             for aoff in range(offset + 8, offset + 8 + length, 4):
-                eltoff, = struct.unpack(b'<I', data[aoff:aoff + 4])
+                (eltoff,) = struct.unpack(b"<I", data[aoff : aoff + 4])
                 result.append(cls._get_item(data, hdrsize, eltoff))
             return result
         elif dtype == BMK_DICT:
             result = {}
             for eoff in range(offset + 8, offset + 8 + length, 8):
-                keyoff, valoff = struct.unpack(b'<II', data[eoff:eoff + 8])
+                keyoff, valoff = struct.unpack(b"<II", data[eoff : eoff + 8])
                 key = cls._get_item(data, hdrsize, keyoff)
                 val = cls._get_item(data, hdrsize, valoff)
                 result[key] = val
@@ -290,7 +294,7 @@ class Bookmark:
         elif dtype == BMK_NULL:
             return None
 
-        print('Unknown data type %08x' % typecode)
+        print("Unknown data type %08x" % typecode)
         return (typecode, databytes)
 
     @classmethod
@@ -298,56 +302,56 @@ class Bookmark:
         """Create a :class:`Bookmark` given byte data."""
 
         if len(data) < 16:
-            raise ValueError('Not a bookmark file (too short)')
+            raise ValueError("Not a bookmark file (too short)")
 
         if isinstance(data, bytearray):
             data = bytes(data)
 
-        magic, size, dummy, hdrsize = struct.unpack(b'<4sIII', data[0:16])
+        magic, size, dummy, hdrsize = struct.unpack(b"<4sIII", data[0:16])
 
-        if magic not in (b'book', b'alis'):
-            raise ValueError('Not a bookmark file (bad magic) %r' % magic)
+        if magic not in (b"book", b"alis"):
+            raise ValueError("Not a bookmark file (bad magic) %r" % magic)
 
         if hdrsize < 16:
-            raise ValueError('Not a bookmark file (header size too short)')
+            raise ValueError("Not a bookmark file (header size too short)")
 
         if hdrsize > size:
-            raise ValueError('Not a bookmark file (header size too large)')
+            raise ValueError("Not a bookmark file (header size too large)")
 
         if size != len(data):
-            raise ValueError('Not a bookmark file (truncated)')
+            raise ValueError("Not a bookmark file (truncated)")
 
-        tocoffset, = struct.unpack(b'<I', data[hdrsize:hdrsize + 4])
+        (tocoffset,) = struct.unpack(b"<I", data[hdrsize : hdrsize + 4])
 
         tocs = []
 
         while tocoffset != 0:
             tocbase = hdrsize + tocoffset
             if (tocoffset > size - hdrsize) or (size - tocbase < 20):
-                raise ValueError('TOC offset out of range')
+                raise ValueError("TOC offset out of range")
 
-            (
-                tocsize, tocmagic, tocid, nexttoc, toccount
-            ) = struct.unpack(b'<IIIII', data[tocbase:tocbase + 20])
+            (tocsize, tocmagic, tocid, nexttoc, toccount) = struct.unpack(
+                b"<IIIII", data[tocbase : tocbase + 20]
+            )
 
-            if tocmagic != 0xfffffffe:
+            if tocmagic != 0xFFFFFFFE:
                 break
 
             tocsize += 8
 
             if size - tocbase < tocsize:
-                raise ValueError('TOC truncated')
+                raise ValueError("TOC truncated")
 
             if tocsize < 12 * toccount:
-                raise ValueError('TOC entries overrun TOC size')
+                raise ValueError("TOC entries overrun TOC size")
 
             toc = {}
             for n in range(0, toccount):
                 ebase = tocbase + 20 + 12 * n
-                eid, eoffset, edummy = struct.unpack(b'<III', data[ebase:ebase + 12])
+                eid, eoffset, edummy = struct.unpack(b"<III", data[ebase : ebase + 12])
 
                 if eid & 0x80000000:
-                    eid = cls._get_item(data, hdrsize, eid & 0x7fffffff)
+                    eid = cls._get_item(data, hdrsize, eid & 0x7FFFFFFF)
 
                 toc[eid] = cls._get_item(data, hdrsize, eoffset)
 
@@ -361,7 +365,7 @@ class Bookmark:
         for tid, toc in self.tocs:
             if key in toc:
                 return toc[key]
-        raise KeyError('Key not found')
+        raise KeyError("Key not found")
 
     def __setitem__(self, key, value):
         if len(self.tocs) == 0:
@@ -379,81 +383,89 @@ class Bookmark:
     @classmethod
     def _encode_item(cls, item, offset):
         if item is True:
-            result = struct.pack(b'<II', 0, BMK_BOOLEAN | BMK_BOOLEAN_ST_TRUE)
+            result = struct.pack(b"<II", 0, BMK_BOOLEAN | BMK_BOOLEAN_ST_TRUE)
         elif item is False:
-            result = struct.pack(b'<II', 0, BMK_BOOLEAN | BMK_BOOLEAN_ST_FALSE)
+            result = struct.pack(b"<II", 0, BMK_BOOLEAN | BMK_BOOLEAN_ST_FALSE)
         elif isinstance(item, str):
-            encoded = item.encode('utf-8')
-            result = struct.pack(b'<II', len(encoded), BMK_STRING | BMK_ST_ONE) + encoded
+            encoded = item.encode("utf-8")
+            result = (
+                struct.pack(b"<II", len(encoded), BMK_STRING | BMK_ST_ONE) + encoded
+            )
         elif isinstance(item, bytes):
-            result = struct.pack(b'<II', len(item), BMK_STRING | BMK_ST_ONE) + item
+            result = struct.pack(b"<II", len(item), BMK_STRING | BMK_ST_ONE) + item
         elif isinstance(item, Data):
-            result = struct.pack(b'<II', len(item.bytes), BMK_DATA | BMK_ST_ONE) + bytes(item.bytes)
+            result = struct.pack(
+                b"<II", len(item.bytes), BMK_DATA | BMK_ST_ONE
+            ) + bytes(item.bytes)
         elif isinstance(item, bytearray):
-            result = struct.pack(b'<II', len(item), BMK_DATA | BMK_ST_ONE) + bytes(item)
+            result = struct.pack(b"<II", len(item), BMK_DATA | BMK_ST_ONE) + bytes(item)
         elif isinstance(item, int):
-            if item > -0x80000000 and item < 0x7fffffff:
-                result = struct.pack(b'<IIi', 4, BMK_NUMBER | kCFNumberSInt32Type, item)
+            if item > -0x80000000 and item < 0x7FFFFFFF:
+                result = struct.pack(b"<IIi", 4, BMK_NUMBER | kCFNumberSInt32Type, item)
             else:
-                result = struct.pack(b'<IIq', 8, BMK_NUMBER | kCFNumberSInt64Type, item)
+                result = struct.pack(b"<IIq", 8, BMK_NUMBER | kCFNumberSInt64Type, item)
         elif isinstance(item, float):
-            result = struct.pack(b'<IId', 8, BMK_NUMBER | kCFNumberFloat64Type, item)
+            result = struct.pack(b"<IId", 8, BMK_NUMBER | kCFNumberFloat64Type, item)
         elif isinstance(item, datetime.datetime):
             secs = item - osx_epoch
-            result = struct.pack(
-                b'<II', 8, BMK_DATE | BMK_ST_ZERO
-            ) + struct.pack(
-                b'>d', float(secs.total_seconds())
+            result = struct.pack(b"<II", 8, BMK_DATE | BMK_ST_ZERO) + struct.pack(
+                b">d", float(secs.total_seconds())
             )
 
         elif isinstance(item, uuid.UUID):
-            result = struct.pack(b'<II', 16, BMK_UUID | BMK_ST_ONE) + item.bytes
+            result = struct.pack(b"<II", 16, BMK_UUID | BMK_ST_ONE) + item.bytes
         elif isinstance(item, URL):
             if item.base:
                 baseoff = offset + 16
                 reloff, baseenc = cls._encode_item(item.base, baseoff)
                 xoffset, relenc = cls._encode_item(item.relative, reloff)
-                result = b''.join([
-                    struct.pack(b'<IIII', 8, BMK_URL | BMK_URL_ST_RELATIVE,
-                                baseoff, reloff),
-                    baseenc,
-                    relenc])
+                result = b"".join(
+                    [
+                        struct.pack(
+                            b"<IIII", 8, BMK_URL | BMK_URL_ST_RELATIVE, baseoff, reloff
+                        ),
+                        baseenc,
+                        relenc,
+                    ]
+                )
             else:
-                encoded = item.relative.encode('utf-8')
-                result = struct.pack(b'<II', len(encoded),
-                                     BMK_URL | BMK_URL_ST_ABSOLUTE) + encoded
+                encoded = item.relative.encode("utf-8")
+                result = (
+                    struct.pack(b"<II", len(encoded), BMK_URL | BMK_URL_ST_ABSOLUTE)
+                    + encoded
+                )
         elif isinstance(item, list):
             ioffset = offset + 8 + len(item) * 4
-            result = [struct.pack(b'<II', len(item) * 4, BMK_ARRAY | BMK_ST_ONE)]
+            result = [struct.pack(b"<II", len(item) * 4, BMK_ARRAY | BMK_ST_ONE)]
             enc = []
             for elt in item:
-                result.append(struct.pack(b'<I', ioffset))
+                result.append(struct.pack(b"<I", ioffset))
                 ioffset, ienc = cls._encode_item(elt, ioffset)
                 enc.append(ienc)
-            result = b''.join(result + enc)
+            result = b"".join(result + enc)
         elif isinstance(item, dict):
             ioffset = offset + 8 + len(item) * 8
-            result = [struct.pack(b'<II', len(item) * 8, BMK_DICT | BMK_ST_ONE)]
+            result = [struct.pack(b"<II", len(item) * 8, BMK_DICT | BMK_ST_ONE)]
             enc = []
             for k, v in item.items():
-                result.append(struct.pack(b'<I', ioffset))
+                result.append(struct.pack(b"<I", ioffset))
                 ioffset, ienc = cls._encode_item(k, ioffset)
                 enc.append(ienc)
-                result.append(struct.pack(b'<I', ioffset))
+                result.append(struct.pack(b"<I", ioffset))
                 ioffset, ienc = cls._encode_item(v, ioffset)
                 enc.append(ienc)
-            result = b''.join(result + enc)
+            result = b"".join(result + enc)
         elif item is None:
-            result = struct.pack(b'<II', 0, BMK_NULL | BMK_ST_ONE)
+            result = struct.pack(b"<II", 0, BMK_NULL | BMK_ST_ONE)
         else:
-            raise ValueError('Unknown item type when encoding: %s' % item)
+            raise ValueError("Unknown item type when encoding: %s" % item)
 
         offset += len(result)
 
         # Pad to a multiple of 4 bytes
         if offset & 3:
             extra = 4 - (offset & 3)
-            result += b'\0' * extra
+            result += b"\0" * extra
             offset += extra
 
         return (offset, result)
@@ -487,15 +499,7 @@ class Bookmark:
             entries.sort()
 
             tocs.append(
-                (
-                    tid,
-                    b''.join(
-                        [
-                            struct.pack(b'<III', k, o, 0)
-                            for k, o in entries
-                        ]
-                    )
-                )
+                (tid, b"".join([struct.pack(b"<III", k, o, 0) for k, o in entries]))
             )
 
         first_toc_offset = offset
@@ -508,26 +512,38 @@ class Bookmark:
             else:
                 next_offset = offset + 20 + len(data)
 
-            result.append(struct.pack(b'<IIIII', len(data) - 8,
-                                      0xfffffffe,
-                                      tid,
-                                      next_offset,
-                                      len(data) // 12))
+            result.append(
+                struct.pack(
+                    b"<IIIII",
+                    len(data) - 8,
+                    0xFFFFFFFE,
+                    tid,
+                    next_offset,
+                    len(data) // 12,
+                )
+            )
             result.append(data)
 
             offset += 20 + len(data)
 
         # Finally, add the header (and the first TOC offset, which isn't part
         # of the header, but goes just after it)
-        header = struct.pack(b'<4sIIIQQQQI', b'book',
-                             offset + 48,
-                             0x10040000,
-                             48,
-                             0, 0, 0, 0, first_toc_offset)
+        header = struct.pack(
+            b"<4sIIIQQQQI",
+            b"book",
+            offset + 48,
+            0x10040000,
+            48,
+            0,
+            0,
+            0,
+            0,
+            first_toc_offset,
+        )
 
         result.insert(0, header)
 
-        return b''.join(result)
+        return b"".join(result)
 
     @classmethod
     def for_file(cls, path):
@@ -535,10 +551,16 @@ class Bookmark:
 
         # Find the filesystem
         st = osx.statfs(path)
-        vol_path = st.f_mntonname.decode('utf-8')
+        vol_path = st.f_mntonname.decode("utf-8")
 
         # Grab its attributes
-        attrs = [osx.ATTR_CMN_CRTIME, osx.ATTR_VOL_SIZE | osx.ATTR_VOL_NAME | osx.ATTR_VOL_UUID, 0, 0, 0]
+        attrs = [
+            osx.ATTR_CMN_CRTIME,
+            osx.ATTR_VOL_SIZE | osx.ATTR_VOL_NAME | osx.ATTR_VOL_UUID,
+            0,
+            0,
+            0,
+        ]
         volinfo = osx.getattrlist(vol_path, attrs, 0)
 
         vol_crtime = volinfo[0]
@@ -547,7 +569,13 @@ class Bookmark:
         vol_uuid = volinfo[3]
 
         # Also grab various attributes of the file
-        attrs = [(osx.ATTR_CMN_OBJTYPE | osx.ATTR_CMN_CRTIME | osx.ATTR_CMN_FILEID), 0, 0, 0, 0]
+        attrs = [
+            (osx.ATTR_CMN_OBJTYPE | osx.ATTR_CMN_CRTIME | osx.ATTR_CMN_FILEID),
+            0,
+            0,
+            0,
+            0,
+        ]
         info = osx.getattrlist(path, attrs, osx.FSOPT_NOFOLLOW)
 
         cnid = info[2]
@@ -574,7 +602,7 @@ class Bookmark:
                 head, tail = os.path.split(head)
             dirname = os.path.join(curdir, dirname)
 
-        # foldername = os.path.basename(dirname)
+        # ?? foldername = os.path.basename(dirname)
 
         rel_path = os.path.relpath(path, vol_path)
 
@@ -598,9 +626,15 @@ class Bookmark:
 
         url_lengths = [relcount, len(name_path) - relcount]
 
-        fileprops = Data(struct.pack(b'<QQQ', flags, 0x0f, 0))
-        volprops = Data(struct.pack(b'<QQQ', 0x81 | kCFURLVolumeSupportsPersistentIDs,
-                                    0x13ef | kCFURLVolumeSupportsPersistentIDs, 0))
+        fileprops = Data(struct.pack(b"<QQQ", flags, 0x0F, 0))
+        volprops = Data(
+            struct.pack(
+                b"<QQQ",
+                0x81 | kCFURLVolumeSupportsPersistentIDs,
+                0x13EF | kCFURLVolumeSupportsPersistentIDs,
+                0,
+            )
+        )
 
         toc = {
             kBookmarkPath: name_path,
@@ -609,8 +643,8 @@ class Bookmark:
             kBookmarkFileProperties: fileprops,
             kBookmarkContainingFolder: len(name_path) - 2,
             kBookmarkVolumePath: vol_path,
-            kBookmarkVolumeIsRoot: vol_path == '/',
-            kBookmarkVolumeURL: URL('file://' + vol_path),
+            kBookmarkVolumeIsRoot: vol_path == "/",
+            kBookmarkVolumeURL: URL("file://" + vol_path),
             kBookmarkVolumeName: vol_name,
             kBookmarkVolumeSize: vol_size,
             kBookmarkVolumeCreationDate: vol_crtime,
@@ -618,7 +652,7 @@ class Bookmark:
             kBookmarkVolumeProperties: volprops,
             kBookmarkCreationOptions: 512,
             kBookmarkWasFileReference: True,
-            kBookmarkUserName: 'unknown',
+            kBookmarkUserName: "unknown",
             kBookmarkUID: 99,
         }
 
@@ -628,16 +662,16 @@ class Bookmark:
         return Bookmark([(1, toc)])
 
     def __repr__(self):
-        result = ['Bookmark([']
+        result = ["Bookmark(["]
         for tid, toc in self.tocs:
-            result.append('(0x%x, {\n' % tid)
+            result.append("(0x%x, {\n" % tid)
             for k, v in toc.items():
                 if isinstance(k, str):
                     kf = repr(k)
                 else:
-                    kf = '0x%04x' % k
-                result.append('  %s: %r\n' % (kf, v))
-            result.append('}),\n')
-        result.append('])')
+                    kf = "0x%04x" % k
+                result.append(f"  {kf}: {v!r}\n")
+            result.append("}),\n")
+        result.append("])")
 
-        return ''.join(result)
+        return "".join(result)
