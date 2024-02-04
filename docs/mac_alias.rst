@@ -14,6 +14,10 @@ Classes
    :members:
    :undoc-members:
 
+.. autoclass:: VolumeInfo
+   :members:
+   :undoc-members:
+
 .. autoclass:: TargetInfo
    :members:
    :undoc-members:
@@ -36,7 +40,7 @@ Constants
 .. py:data:: ALIAS_KIND_FILE
              ALIAS_KIND_FOLDER
 
-   Values for the :attr:`~mac_alias.Alias.kind` attribute.
+   Values for the :attr:`TargetInfo.kind` attribute.
 
 .. py:data:: ALIAS_HFS_VOLUME_SIGNATURE
 
@@ -51,7 +55,7 @@ Constants
 	     ALIAS_FILESYSTEM_NTFS
 	     ALIAS_FILESYSTEM_UNKNOWN
 
-   Values returned by the :attr:`~mac_alias.Alias.filesystem_type` attribute.
+   Values returned by the :attr:`VolumeInfo.filesystem_type` attribute.
 
 .. py:data:: ALIAS_FIXED_DISK
              ALIAS_NETWORK_DISK
