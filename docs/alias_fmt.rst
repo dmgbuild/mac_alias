@@ -49,7 +49,7 @@ Offset Size Contents
 28     4    Target CNID
 32     8    Target creation date (65536ths of a second since 1904-01-01 00:00:00 UTC)
 40     4    Volume attributes
-54     14   Reserved (set to zero)
+44     14   Reserved (set to zero)
 ====== ==== ========
 
 This record is optionally followed by tag-length-value data:
