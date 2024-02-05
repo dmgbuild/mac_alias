@@ -37,7 +37,7 @@ classifiers = [
 
 [project.urls]
 Homepage = "http://alastairs-place.net/projects/mac_alias"
-Source = "https://github.com/al45stair/mac_alias"
+Source = "https://github.com/dmgbuild/mac_alias"
 
 [project.scripts]
 mac_alias = "mac_alias.__main__:main"
