@@ -51,7 +51,7 @@ jobs:
     needs: pretest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13-dev" ]
+        python-version: [ "3.8", "3.9", "3.10", "3.11", "3.12", "3.13-dev" ]
         macOS-version: [
             # x86_64 runners
             "macos-11", "macos-12", "macos-13",
@@ -70,6 +70,7 @@ jobs:
 
           - macOS-version: "macos-14"
             python-version : "3.9"
+
     runs-on: ${{ matrix.macOS-version }}
     steps:
     - uses: actions/checkout@v4.1.1
