@@ -9,4 +9,5 @@ jobs:
   pre-commit-update:
     name: Update pre-commit
     uses: beeware/.github/.github/workflows/pre-commit-update.yml@main
-    secrets: inherit
+    secrets:
+      BRUTUS_PAT_TOKEN: ${{ secrets.BRUTUS_PAT_TOKEN }}
