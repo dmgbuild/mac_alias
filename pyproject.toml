@@ -36,7 +36,7 @@ classifiers = [
 ]
 
 [project.urls]
-Documentation = "https://mac_alias.readthedocs.io/en/latest/"
+Documentation = "https://mac-alias.readthedocs.io/en/latest/"
 Homepage = "https://github.com/dmgbuild/mac_alias"
 Tracker = "https://github.com/dmgbuild/mac_alias/issues"
 Source = "https://github.com/dmgbuild/mac_alias"
