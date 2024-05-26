@@ -1,3 +1,6 @@
+=========
+mac_alias
+=========
 
 .. |pyversions| image:: https://img.shields.io/pypi/pyversions/mac_alias.svg
    :target: https://pypi.python.org/pypi/mac_alias
@@ -18,10 +21,6 @@
 .. |ci| image:: https://github.com/dmgbuild/mac_alias/workflows/CI/badge.svg?branch=main
    :target: https://github.com/dmgbuild/mac_alias/actions
    :alt: Build Status
-
-=========
-mac_alias
-=========
 
 |pyversions| |version| |maturity| |license| |ci|
 
