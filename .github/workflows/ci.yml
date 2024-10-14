@@ -52,24 +52,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.8", "3.9", "3.10", "3.11", "3.12", "3.13-dev" ]
+        python-version: [ "3.9", "3.10", "3.11", "3.12", "3.13" ]
         macOS-version: [
             # x86_64 runners
-            "macos-12", "macos-13",
+            "macos-13",
             # M1 runners
             "macos-14"
           ]
         include:
           - experimental: false
 
-          - python-version: "3.13-dev"
+          - python-version: "3.13"
             experimental: true
 
         exclude:
-          # actions/setup-python doesn't provide Python3.8 or 3.9 for M1.
-          - macOS-version: "macos-14"
-            python-version : "3.8"
-
+          # actions/setup-python doesn't provide Python 3.9 for M1.
           - macOS-version: "macos-14"
             python-version : "3.9"
 
