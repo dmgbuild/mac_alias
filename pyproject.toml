@@ -10,7 +10,7 @@ name = "mac_alias"
 description = "Generate/parse macOS Alias records from Python"
 readme = "README.rst"
 requires-python = ">= 3.9"
-license = "BSD-3-Clause"
+license = "MIT"
 license-files = [
     "LICENSE",
 ]
