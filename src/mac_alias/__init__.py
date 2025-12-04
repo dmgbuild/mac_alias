@@ -1,7 +1,7 @@
 from .alias import *
 from .bookmark import *
 
-__version__ = "2.2.2"
+__version__ = "2.2.3"
 
 __all__ = [
     "__version__",
