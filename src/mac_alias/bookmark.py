@@ -190,7 +190,7 @@ class Data:
         self.bytes = bytes(bytedata)
 
     def __repr__(self):
-        return "Data(%r)" % self.bytes
+        return f"Data({self.bytes!r})"
 
 
 class URL:
@@ -213,7 +213,7 @@ class URL:
             return urljoin(self.base.absolute, self.relative)
 
     def __repr__(self):
-        return "URL(%r)" % self.absolute
+        return f"URL({self.absolute!r})"
 
 
 class Bookmark:
@@ -294,7 +294,7 @@ class Bookmark:
         elif dtype == BMK_NULL:
             return None
 
-        print("Unknown data type %08x" % typecode)
+        print("Unknown data type %08x" % typecode)  # noqa: T201
         return (typecode, databytes)
 
     @classmethod
@@ -310,7 +310,7 @@ class Bookmark:
         magic, size, dummy, hdrsize = struct.unpack(b"<4sIII", data[0:16])
 
         if magic not in (b"book", b"alis"):
-            raise ValueError("Not a bookmark file (bad magic) %r" % magic)
+            raise ValueError(f"Not a bookmark file (bad magic) {magic!r}")
 
         if hdrsize < 16:
             raise ValueError("Not a bookmark file (header size too short)")
@@ -346,7 +346,7 @@ class Bookmark:
                 raise ValueError("TOC entries overrun TOC size")
 
             toc = {}
-            for n in range(0, toccount):
+            for n in range(toccount):
                 ebase = tocbase + 20 + 12 * n
                 eid, eoffset, edummy = struct.unpack(b"<III", data[ebase : ebase + 12])
 
@@ -458,7 +458,7 @@ class Bookmark:
         elif item is None:
             result = struct.pack(b"<II", 0, BMK_NULL | BMK_ST_ONE)
         else:
-            raise ValueError("Unknown item type when encoding: %s" % item)
+            raise ValueError(f"Unknown item type when encoding: {item}")
 
         offset += len(result)
 
@@ -664,12 +664,12 @@ class Bookmark:
     def __repr__(self):
         result = ["Bookmark(["]
         for tid, toc in self.tocs:
-            result.append("(0x%x, {\n" % tid)
+            result.append(f"(0x{tid:x}, {{\n")
             for k, v in toc.items():
                 if isinstance(k, str):
                     kf = repr(k)
                 else:
-                    kf = "0x%04x" % k
+                    kf = f"0x{k:04x}"
                 result.append(f"  {kf}: {v!r}\n")
             result.append("}),\n")
         result.append("])")

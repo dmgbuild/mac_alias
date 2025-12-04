@@ -1,4 +1,3 @@
-# flake8: noqa
 from .alias import *
 from .bookmark import *
 

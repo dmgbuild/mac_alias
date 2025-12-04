@@ -71,9 +71,7 @@ class AppleShareInfo:
         self.user = user
 
     def __repr__(self):
-        return "AppleShareInfo({!r},{!r},{!r})".format(
-            self.zone, self.server, self.user
-        )
+        return f"AppleShareInfo({self.zone!r},{self.server!r},{self.user!r})"
 
 
 class VolumeInfo:
@@ -171,7 +169,7 @@ class VolumeInfo:
             v = getattr(self, a)
             if v is not None:
                 values.append(f"{a}={v!r}")
-        return "VolumeInfo(%s)" % ",".join(values)
+        return "VolumeInfo({})".format(",".join(values))
 
 
 class TargetInfo:
@@ -255,9 +253,9 @@ class TargetInfo:
             values.append(repr(v))
 
         if self.levels_from != -1:
-            values.append("levels_from=%r" % self.levels_from)
+            values.append(f"levels_from={self.levels_from!r}")
         if self.levels_to != -1:
-            values.append("levels_to=%r" % self.levels_to)
+            values.append(f"levels_to={self.levels_to!r}")
 
         kwargs = [
             "folder_name",
@@ -270,7 +268,7 @@ class TargetInfo:
             v = getattr(self, a)
             values.append(f"{a}={v!r}")
 
-        return "TargetInfo(%s)" % ",".join(values)
+        return "TargetInfo({})".format(",".join(values))
 
 
 TAG_CARBON_FOLDER_NAME = 0
@@ -476,7 +474,8 @@ class Alias:
         vol_path = st.f_mntonname
 
         # File and folder names in HFS+ are normalized to a form similar to NFD.
-        # Must be normalized (NFD->NFC) before use to avoid unicode string comparison issues.
+        # Must be normalized (NFD->NFC) before use to avoid unicode string
+        # comparison issues.
         vol_path = normalize("NFC", vol_path.decode("utf-8")).encode("utf-8")
 
         # Grab its attributes
@@ -755,18 +754,18 @@ class Alias:
             return b.getvalue()
 
     def __str__(self):
-        return "<Alias target=%s>" % self.target.filename
+        return f"<Alias target={self.target.filename}>"
 
     def __repr__(self):
         values = []
         if self.appinfo != b"\0\0\0\0":
-            values.append("appinfo=%r" % self.appinfo)
+            values.append(f"appinfo={self.appinfo!r}")
         if self.version != 2:
-            values.append("version=%r" % self.version)
+            values.append(f"version={self.version!r}")
         if self.volume is not None:
-            values.append("volume=%r" % self.volume)
+            values.append(f"volume={self.volume!r}")
         if self.target is not None:
-            values.append("target=%r" % self.target)
+            values.append(f"target={self.target!r}")
         if self.extra:
-            values.append("extra=%r" % self.extra)
-        return "Alias(%s)" % ",".join(values)
+            values.append(f"extra={self.extra!r}")
+        return "Alias({})".format(",".join(values))
