@@ -48,7 +48,7 @@ mac_alias = "mac_alias.__main__:main"
 
 [dependency-groups]
 package = [
-    "build == 1.2.1",
+    "build == 1.3.0",
     "twine == 6.1.0",
 ]
 
