@@ -307,10 +307,23 @@ class Bookmark:
         if isinstance(data, bytearray):
             data = bytes(data)
 
-        magic, size, dummy, hdrsize = struct.unpack(b"<4sIII", data[0:16])
+        magic, size = struct.unpack(b"<4sI", data[0:8])
 
         if magic not in (b"book", b"alis"):
             raise ValueError(f"Not a bookmark file (bad magic) {magic!r}")
+
+        if size == 0:
+            (magic,) = struct.unpack(b"<16s", data[0:16])
+            if magic == b"book\0\0\0\0mark\0\0\0\0":
+                # 56-byte header
+                hdrsize1, hdrsize2, size, _ = struct.unpack(b"IIII", data[16:32])
+                hdrsize = max(hdrsize1, hdrsize2)
+                size = size + hdrsize
+            else:
+                raise ValueError("Not a bookmark file (size of 0)")
+        else:
+            # 40-byte header
+            size, dummy, hdrsize = struct.unpack(b"<4sIII", data[4:16])
 
         if hdrsize < 16:
             raise ValueError("Not a bookmark file (header size too short)")
