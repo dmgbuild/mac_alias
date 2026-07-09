@@ -7,21 +7,36 @@ The Bookmark format is a more modern alternative to the alias record.
 Bookmarks consist of a set of dictionaries mapping keys to values; each
 dictionary has its own Table of Contents (TOC) structure.
 
-The record starts with a header:
+The record starts with a header. One version of the header is 48 bytes long:
 
 ====== ==== ========
 Offset Size Contents
 ====== ==== ========
 0      4    Magic number ('book' or 'alis')
-4      4    Total size in bytes
+4      4    Total file size in bytes
 8      4    Unknown (0x10040000) - might be a version?
 12     4    Size of header (48)
 16     32   Reserved
 ====== ==== ========
 
+Another version is 56 bytes long:
+
+====== ==== ========
+Offset Size Contents
+====== ==== ========
+0      16   Magic number ('book\0\0\0\0mark\0\0\0\0')
+16     4    Size of header
+20     4    Size of header, again (or offset to TOC index pointer?)
+24     4    Size of data segment (not includng header)
+28     4    Unknown (0x10040000)
+32     8    Unknown (0x25e0000000000000)
+40     8    Unknown
+48     8    Reserved
+====== ==== ========
+
 All offsets stored in the file are relative to the *end* of this header.
 
-This is immediately followed at location 48 by a 4-byte offset to the first
+This is immediately followed by a 4-byte offset to the first
 TOC structure.  It seems odd that this is not part of the header, but for
 some reason best known to the engineers at Apple, it isn't.
 
