@@ -49,20 +49,20 @@ mac_alias = "mac_alias.__main__:main"
 [dependency-groups]
 package = [
     "build == 1.5.0",
-    "twine == 6.2.0",
+    "twine == 7.0.0",
 ]
 
 pre-commit = [
-    "prek == 0.4.8",
+    "prek == 0.4.11",
 ]
 
 test = [
-    "coverage == 7.15.0",
+    "coverage == 7.15.2",
     "pytest == 9.1.1",
 ]
 
 tox = [
-    "tox-uv == 1.35.2"
+    "tox-uv == 1.36.0"
 ]
 
 dev = [
@@ -129,3 +129,6 @@ extend-select = [
 # F403: * import used; unable to detect undefined names
 # F405: undefined, or defined from star imports
 "src/mac_alias/__init__.py" = ["F403", "F405"]
+# Ignores needed to pass the Ruff 0.16 update.
+"src/mac_alias/alias.py" = ["UP031", "RUF012"]
+"src/mac_alias/osx.py" = ["UP031", "RUF012"]

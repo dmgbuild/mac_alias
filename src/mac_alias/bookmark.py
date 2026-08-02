@@ -294,7 +294,7 @@ class Bookmark:
         elif dtype == BMK_NULL:
             return None
 
-        print("Unknown data type %08x" % typecode)  # noqa: T201
+        print(f"Unknown data type {typecode:08x}")  # noqa: T201
         return (typecode, databytes)
 
     @classmethod
@@ -307,7 +307,7 @@ class Bookmark:
         if isinstance(data, bytearray):
             data = bytes(data)
 
-        magic, size, dummy, hdrsize = struct.unpack(b"<4sIII", data[0:16])
+        magic, size, _dummy, hdrsize = struct.unpack(b"<4sIII", data[0:16])
 
         if magic not in (b"book", b"alis"):
             raise ValueError(f"Not a bookmark file (bad magic) {magic!r}")
@@ -348,7 +348,7 @@ class Bookmark:
             toc = {}
             for n in range(toccount):
                 ebase = tocbase + 20 + 12 * n
-                eid, eoffset, edummy = struct.unpack(b"<III", data[ebase : ebase + 12])
+                eid, eoffset, _edummy = struct.unpack(b"<III", data[ebase : ebase + 12])
 
                 if eid & 0x80000000:
                     eid = cls._get_item(data, hdrsize, eid & 0x7FFFFFFF)
@@ -418,7 +418,7 @@ class Bookmark:
             if item.base:
                 baseoff = offset + 16
                 reloff, baseenc = cls._encode_item(item.base, baseoff)
-                xoffset, relenc = cls._encode_item(item.relative, reloff)
+                _xoffset, relenc = cls._encode_item(item.relative, reloff)
                 result = b"".join(
                     [
                         struct.pack(
