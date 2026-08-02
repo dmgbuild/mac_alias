@@ -297,12 +297,14 @@ class Alias:
         version=2,
         volume=None,
         target=None,
-        extra=[],
+        extra=None,
     ):
         """Construct a new :class:`Alias` object with the specified
         contents."""
 
         #: Application specific information (four byte byte-string)
+        if extra is None:
+            extra = []
         self.appinfo = appinfo
 
         #: Version (we support versions 2 and 3)
@@ -344,7 +346,7 @@ class Alias:
                 levels_to,  # h
                 volattrs,  # I
                 volfsid,  # 2s
-                reserved,  # 10s
+                _reserved,  # 10s
             ) = struct.unpack(b">h28pI2shI64pII4s4shhI2s10s", b.read(142))
         else:
             (
@@ -356,7 +358,7 @@ class Alias:
                 cnid,  # I
                 crdate_hr,  # Q
                 volattrs,  # I
-                reserved,  # 14s
+                _reserved,  # 14s
             ) = struct.unpack(b">hQ4shIIQI14s", b.read(46))
 
             volname = b""
@@ -463,7 +465,7 @@ class Alias:
     def for_file(cls, path):
         """Create an :class:`Alias` that points at the specified file."""
         if sys.platform != "darwin":
-            raise Exception("Not implemented (requires special support)")
+            raise RuntimeError("Not implemented (requires special support)")
 
         path = encode_utf8(path)
 

@@ -129,3 +129,6 @@ extend-select = [
 # F403: * import used; unable to detect undefined names
 # F405: undefined, or defined from star imports
 "src/mac_alias/__init__.py" = ["F403", "F405"]
+# Ignores needed to pass the Ruff 0.16 update.
+"src/mac_alias/alias.py" = ["UP031", "RUF012"]
+"src/mac_alias/osx.py" = ["UP031", "RUF012"]
