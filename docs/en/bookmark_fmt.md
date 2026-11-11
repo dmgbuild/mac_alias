@@ -2,9 +2,7 @@
 
 *Everything below is little-endian unless otherwise mentioned.*
 
-The Bookmark format is a more modern alternative to the alias record.
-Bookmarks consist of a set of dictionaries mapping keys to values; each
-dictionary has its own Table of Contents (TOC) structure.
+The Bookmark format is a more modern alternative to the alias record. Bookmarks consist of a set of dictionaries mapping keys to values; each dictionary has its own Table of Contents (TOC) structure.
 
 The record starts with a header:
 
@@ -18,9 +16,7 @@ The record starts with a header:
 
 All offsets stored in the file are relative to the *end* of this header.
 
-This is immediately followed at location 48 by a 4-byte offset to the first
-TOC structure.  It seems odd that this is not part of the header, but for
-some reason best known to the engineers at Apple, it isn't.
+This is immediately followed at location 48 by a 4-byte offset to the first TOC structure. It seems odd that this is not part of the header, but for some reason best known to the engineers at Apple, it isn't.
 
 A TOC starts with its own header:
 
@@ -32,9 +28,7 @@ A TOC starts with its own header:
 | 12 | 4 | Next TOC offset (or 0 if none) |
 | 16 | 4 | Number of entries in this TOC |
 
-This is followed by an array of TOC entries.  There is code that does a
-binary search of the TOC structure, so they *must* be stored in *key* order.
-A TOC entry looks like this:
+This is followed by an array of TOC entries. There is code that does a binary search of the TOC structure, so they *must* be stored in *key* order. A TOC entry looks like this:
 
 | Offset | Size | Contents |
 |--------|------|----------|
@@ -42,8 +36,7 @@ A TOC entry looks like this:
 | 4 | 4 | Offset to data record |
 | 8 | 4 | Reserved (0) |
 
-If the key has its top bit set (`0x80000000`), then (key & `0x7fffffff`) gives the
-offset of a string record.
+If the key has its top bit set (`0x80000000`), then (key & `0x7fffffff`) gives the offset of a string record.
 
 Each data record has the following fields:
 
@@ -74,10 +67,7 @@ Known data types are as follows:
 | `0x0901` | URL | UTF-8 string |
 | `0x0902` | URL (relative) | 4-byte offset to base URL, 4-byte offset to UTF-8 string |
 
-The first TOC in the file generally has its identifier set to 1.  As
-mentioned, the keys in each TOC can be strings, in which case the key field
-will contain the offset to the string, or they can be certain special values.
-Currently known values are:
+The first TOC in the file generally has its identifier set to 1. As mentioned, the keys in each TOC can be strings, in which case the key field will contain the offset to the string, or they can be certain special values. Currently known values are:
 
 | Key | Meaning | Value |
 |-----|---------|-------|
@@ -119,22 +109,10 @@ Currently known values are:
 | `0xf080` | Sandbox RW extension | Looks like a hash with data and an access right |
 | `0xf081` | Sandbox RO extension | As above |
 
-The target flags (0x1010) are encoded as a Data object containing three 8-byte
-integers.  The first contains flags describing the target; the second says
-which flags are valid, and the third appears to always be zero.  Supported
-flags can be found in `CFURLPriv.h`, which is part of CF-Lite; for the target
-flags field, it's the "resource property flags" that are valid.
+The target flags (0x1010) are encoded as a Data object containing three 8-byte integers. The first contains flags describing the target; the second says which flags are valid, and the third appears to always be zero. Supported flags can be found in `CFURLPriv.h`, which is part of CF-Lite; for the target flags field, it's the "resource property flags" that are valid.
 
-Similarly the volume flags (0x2020) are encoded in the same manner, but this
-time it's the "volume property flags" that are interesting.
+Similarly the volume flags (0x2020) are encoded in the same manner, but this time it's the "volume property flags" that are interesting.
 
-The TOC path (0x2000) is only used if there are multiple volumes between the
-target and the file system root.  In that case, it contains an array, with
-every other item holding a TOC ID for a dictionary describing a volume; the
-values between TOC IDs appear to be zero.  The array starts from the
-file system root.
+The TOC path (0x2000) is only used if there are multiple volumes between the target and the file system root. In that case, it contains an array, with every other item holding a TOC ID for a dictionary describing a volume; the values between TOC IDs appear to be zero. The array starts from the file system root.
 
-The URL length array (0xe003) is used to indicate how the path components were
-originally broken up; if the URL encoded by the bookmark has a base URL, each
-entry in the length array gives the number of path elements that come from
-that base URL.
+The URL length array (0xe003) is used to indicate how the path components were originally broken up; if the URL encoded by the bookmark has a base URL, each entry in the length array gives the number of path elements that come from that base URL.

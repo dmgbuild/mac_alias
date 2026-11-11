@@ -4,21 +4,13 @@ This document refers to version {{ release }}.
 
 ## What is this?
 
-macOS has a special data structure it calls an Alias, which allows
-programs that make use of it to locate the file to which it refers more
-reliably than they would be able to from e.g. a filename alone.
+macOS has a special data structure it calls an Alias, which allows programs that make use of it to locate the file to which it refers more reliably than they would be able to from e.g. a filename alone.
 
-The format of this structure is not documented, so until recently you would
-have used macOS APIs to construct and process Alias records.  Sadly, Apple
-has deprecated the APIs in question in favor of its new "Bookmark"
-functionality; this is understandable, but it makes it tricky to construct an
-Alias record reliably in future.
+The format of this structure is not documented, so until recently you would have used macOS APIs to construct and process Alias records. Sadly, Apple has deprecated the APIs in question in favor of its new "Bookmark" functionality; this is understandable, but it makes it tricky to construct an Alias record reliably in future.
 
-This module contains code to parse and generate Alias records from a Pythonic
-equivalent data structure, and does not rely on the deprecated APIs.
+This module contains code to parse and generate Alias records from a Pythonic equivalent data structure, and does not rely on the deprecated APIs.
 
-It also contains code to parse and generate Bookmark records, again from a
-Pythonic equivalent, and without relying on OS X APIs.
+It also contains code to parse and generate Bookmark records, again from a Pythonic equivalent, and without relying on OS X APIs.
 
 ## Usage
 
@@ -42,8 +34,7 @@ Finally, to build an [`Alias`][mac_alias.Alias] for a file:
 Alias.for_file("/path/to/file.ext")
 ```
 
-It's probably best to resist the temptation to mess with the Alias class too
-much otherwise.
+It's probably best to resist the temptation to mess with the Alias class too much otherwise.
 
 Similarly, to parse a Bookmark record given binary data:
 

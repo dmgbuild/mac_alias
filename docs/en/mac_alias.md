@@ -78,11 +78,6 @@
 `kBookmarkSandboxRoExtension`
 `kBookmarkAliasData`
 `kBookmarkSecurityExtension`
-:   Bookmark data keys.  A Bookmark holds a set of TOCs (Tables of Contents),
-    each of which maps a set of keys to a set of values.  The keys are either
-    numeric, like the ones represented by the above constants, or strings.
+:   Bookmark data keys. A Bookmark holds a set of TOCs (Tables of Contents), each of which maps a set of keys to a set of values. The keys are either numeric, like the ones represented by the above constants, or strings.
 
-    Bookmarks can hold strings, byte data, numbers, dates, booleans, arrays,
-    dicts, UUIDs, URLs and NULLs (represented by Python `None`).  If you store
-    data in a bookmark using the string key functionality, the documentation
-    for CF/NSURL recommends using reverse DNS for the keys to avoid clashes.
+    Bookmarks can hold strings, byte data, numbers, dates, booleans, arrays, dicts, UUIDs, URLs and NULLs (represented by Python `None`). If you store data in a bookmark using the string key functionality, the documentation for CF/NSURL recommends using reverse DNS for the keys to avoid clashes.
