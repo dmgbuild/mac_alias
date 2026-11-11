@@ -58,7 +58,6 @@ jobs:
     with:
       tox-source: "--group tox"
 
-
   docs-lint:
     name: Documentation linting
     needs: [ pre-commit, towncrier ]
