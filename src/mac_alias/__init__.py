@@ -1,7 +1,9 @@
+from importlib.metadata import version
+
 from .alias import *
 from .bookmark import *
 
-__version__ = "2.2.3"
+__version__ = version("mac_alias")
 
 __all__ = [
     "ALIAS_1_44MB_FLOPPY_DISK",

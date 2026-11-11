@@ -1,6 +1,7 @@
 [build-system]
 requires = [
     "setuptools==84.2.1",
+    "setuptools_scm==10.3.4",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -43,9 +44,6 @@ Homepage = "https://github.com/dmgbuild/mac_alias"
 Tracker = "https://github.com/dmgbuild/mac_alias/issues"
 Source = "https://github.com/dmgbuild/mac_alias"
 
-[project.scripts]
-mac_alias = "mac_alias.__main__:main"
-
 [dependency-groups]
 package = [
     "build == 1.6.1",
@@ -81,8 +79,8 @@ docs = [
     "sphinx == 9.0.4",
 ]
 
-[tool.setuptools.dynamic]
-version = {attr = "mac_alias.__version__"}
+[tool.setuptools_scm]
+# An empty table is needed to enable setuptools_scm
 
 [tool.coverage.run]
 branch = true
