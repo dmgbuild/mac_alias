@@ -2,6 +2,20 @@
 
 <!-- towncrier release notes start -->
 
+## 2.2.4 (2026-11-11)
+
+### Features
+
+* Support for Python 3.16 was added. ([#234](https://github.com/dmgbuild/mac_alias/issues/234))
+
+### Backward Incompatible Changes
+
+* Support for Python 3.10 was dropped. ([#231](https://github.com/dmgbuild/mac_alias/issues/231))
+
+### Misc
+
+* [#205](https://github.com/dmgbuild/mac_alias/issues/205), [#206](https://github.com/dmgbuild/mac_alias/issues/206), [#207](https://github.com/dmgbuild/mac_alias/issues/207), [#208](https://github.com/dmgbuild/mac_alias/issues/208), [#209](https://github.com/dmgbuild/mac_alias/issues/209), [#211](https://github.com/dmgbuild/mac_alias/issues/211), [#212](https://github.com/dmgbuild/mac_alias/issues/212), [#213](https://github.com/dmgbuild/mac_alias/issues/213), [#214](https://github.com/dmgbuild/mac_alias/issues/214), [#215](https://github.com/dmgbuild/mac_alias/issues/215), [#216](https://github.com/dmgbuild/mac_alias/issues/216), [#217](https://github.com/dmgbuild/mac_alias/issues/217), [#218](https://github.com/dmgbuild/mac_alias/issues/218), [#220](https://github.com/dmgbuild/mac_alias/issues/220), [#222](https://github.com/dmgbuild/mac_alias/issues/222), [#223](https://github.com/dmgbuild/mac_alias/issues/223), [#224](https://github.com/dmgbuild/mac_alias/issues/224), [#225](https://github.com/dmgbuild/mac_alias/issues/225), [#226](https://github.com/dmgbuild/mac_alias/issues/226), [#227](https://github.com/dmgbuild/mac_alias/issues/227), [#228](https://github.com/dmgbuild/mac_alias/issues/228), [#229](https://github.com/dmgbuild/mac_alias/issues/229), [#230](https://github.com/dmgbuild/mac_alias/issues/230), [#232](https://github.com/dmgbuild/mac_alias/issues/232), [#233](https://github.com/dmgbuild/mac_alias/issues/233), [#235](https://github.com/dmgbuild/mac_alias/issues/235), [#236](https://github.com/dmgbuild/mac_alias/issues/236)
+
 ## 2.2.3 (2025-12-04)
 
 ### Features
