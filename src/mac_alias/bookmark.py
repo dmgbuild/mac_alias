@@ -196,7 +196,7 @@ class Data:
 class URL:
     def __init__(self, base, rel=None):
         if rel is not None:
-            #: The base URL, if any (a :class:`URL`)
+            #: The base URL, if any (a [`URL`][mac_alias.URL])
             self.base = base
             #: The rest of the URL (a string)
             self.relative = rel
@@ -299,7 +299,7 @@ class Bookmark:
 
     @classmethod
     def from_bytes(cls, data):
-        """Create a :class:`Bookmark` given byte data."""
+        """Create a [`Bookmark`][mac_alias.Bookmark] given byte data."""
 
         if len(data) < 16:
             raise ValueError("Not a bookmark file (too short)")
@@ -471,7 +471,7 @@ class Bookmark:
         return (offset, result)
 
     def to_bytes(self):
-        """Convert this :class:`Bookmark` to a byte representation."""
+        """Convert this [`Bookmark`][mac_alias.Bookmark] to a byte representation."""
 
         result = []
         tocs = []
@@ -547,7 +547,7 @@ class Bookmark:
 
     @classmethod
     def for_file(cls, path):
-        """Construct a :class:`Bookmark` for a given file."""
+        """Construct a [`Bookmark`][mac_alias.Bookmark] for a given file."""
 
         # Find the filesystem
         st = osx.statfs(path)

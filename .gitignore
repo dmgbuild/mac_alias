@@ -7,8 +7,11 @@
 *.egg-info
 *.pyc
 *~
-build
+build/
 coverage.xml
-dist
-docs/_build
-venv*
+dist/
+site
+venv*/
+.worktrees/
+local/
+_build/

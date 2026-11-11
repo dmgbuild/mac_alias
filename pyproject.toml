@@ -73,10 +73,12 @@ dev = [
     {include-group = "tox"},
 ]
 
-# Docs are always built on Py3.12; see RTD and tox config files.
+# Docs are always built on Py3.14; see RTD and tox config files.
 docs = [
-    "furo == 2025.12.19",
-    "sphinx == 9.0.4",
+    "griffe-sphinx == 0.3.1",
+    "mkdocstrings-python == 2.0.10",
+    "pyspelling==2.13",
+    "zensical == 0.1.1",
 ]
 
 [tool.setuptools_scm]
