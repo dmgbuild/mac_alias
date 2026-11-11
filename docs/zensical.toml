@@ -3,7 +3,7 @@ site_name = "mac_alias"
 site_description = "Generate/parse macOS Alias records from Python"
 site_author = "Alastair Houghton"
 site_url = "https://mac-alias.readthedocs.io/en/latest/"
-copyright = "Copyright &copy; 2014-2020, Alastair Houghton"
+copyright = "Copyright &copy; Alastair Houghton"
 repo_url = "https://github.com/dmgbuild/mac_alias"
 repo_name = "dmgbuild/mac_alias"
 docs_dir = "en"
@@ -91,7 +91,3 @@ show_symbol_type_toc = true
 show_symbol_type_heading = true
 show_attribute_values = false
 heading_level = 3
-
-# filters = ["!^_"]
-# show_root_full_path = false
-# show_if_no_docstring = true

@@ -16,6 +16,6 @@ build:
       - python -m pip install --group tox
     build:
       html:
-        - python -m tox -e docs
+        - python -m tox -e docs-all
         - mkdir -p $READTHEDOCS_OUTPUT/html/
-        - cp -R site/. $READTHEDOCS_OUTPUT/html/
+        - cp -R docs/site/. $READTHEDOCS_OUTPUT/html/
