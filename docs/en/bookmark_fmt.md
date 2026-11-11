@@ -115,4 +115,4 @@ Similarly the volume flags (0x2020) are encoded in the same manner, but this tim
 
 The TOC path (0x2000) is only used if there are multiple volumes between the target and the file system root. In that case, it contains an array, with every other item holding a TOC ID for a dictionary describing a volume; the values between TOC IDs appear to be zero. The array starts from the file system root.
 
-The URL length array (0xe003) is used to indicate how the path components were originally broken up; if the URL encoded by the bookmark has a base URL, each entry in the length array gives the number of path elements that come from that base URL.
+The URL length array (`0xe003`) is used to indicate how the path components were originally broken up; if the URL encoded by the bookmark has a base URL, each entry in the length array gives the number of path elements that come from that base URL.
