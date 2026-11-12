@@ -6,6 +6,6 @@
 
 While it is written in pure Python, some macOS specific code is required to generate a proper Alias or Bookmark record for a given file, so this module currently is not portable to other platforms.
 
-Credit is due to Wim Lewis <wiml@hhhh.org>, whose work on reverse engineering the alias format was extremely useful in writing this code.  Alastair Houghton <alastair@alastairs-place.net> was responsible for reverse engineering the bookmark format.
+Credit is due to Wim Lewis <wiml@hhhh.org>, whose work on reverse engineering the alias format was extremely useful in writing this code. Alastair Houghton <alastair@alastairs-place.net> was responsible for reverse engineering the bookmark format.
 
 See the [documentation](https://mac-alias.readthedocs.io) for more information.

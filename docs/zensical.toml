@@ -1,0 +1,93 @@
+[project]
+site_name = "mac_alias"
+site_description = "Generate/parse macOS Alias records from Python"
+site_author = "Alastair Houghton"
+site_url = "https://mac-alias.readthedocs.io/en/latest/"
+copyright = "Copyright &copy; Alastair Houghton"
+repo_url = "https://github.com/dmgbuild/mac_alias"
+repo_name = "dmgbuild/mac_alias"
+docs_dir = "en"
+site_dir = "site"
+exclude_docs = """
+/macros.py
+__pycache__/
+"""
+nav = [
+  { "mac_alias (v{{ release }})" = "index.md" },
+  { "Code Documentation" = [
+    "mac_alias.md",
+  ] },
+  { "Binary Formats" = [
+    "alias_fmt.md",
+    "bookmark_fmt.md",
+  ] },
+]
+
+[project.theme]
+language = "en"
+features = [
+  "content.code.copy",
+  "navigation.footer",
+  "navigation.path",
+  "navigation.sections",
+  "navigation.top",
+  "navigation.tracking",
+  "search.highlight",
+]
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme)"
+toggle.icon = "lucide/sun-moon"
+toggle.name = "Switch to light mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to system preference"
+
+[project.markdown_extensions]
+admonition = {}
+attr_list = {}
+def_list = {}
+md_in_html = {}
+tables = {}
+toc.permalink = true
+pymdownx.highlight.anchor_linenums = true
+pymdownx.highlight.pygments_lang_class = true
+pymdownx.inlinehilite = {}
+pymdownx.superfences = {}
+
+# Provides the `{{ release }}` variable, using the installed package version.
+[project.plugins.macros]
+module_name = "macros"
+on_error_fail = true
+on_undefined = "strict"
+
+[project.plugins.mkdocstrings.handlers.python]
+paths = ["src"]
+
+[project.plugins.mkdocstrings.handlers.python.options]
+docstring_style = "sphinx"
+extensions = ["griffe_sphinx"]
+allow_inspection = false
+show_source = false
+members_order = "alphabetical"
+annotations_path = "brief"
+merge_init_into_class = true
+separate_signature = false
+show_signature_annotations = true
+signature_crossrefs = true
+show_root_heading = true
+docstring_section_style = "spacy"
+line_length = 80
+show_symbol_type_toc = true
+show_symbol_type_heading = true
+show_attribute_values = false
+heading_level = 3

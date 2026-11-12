@@ -129,7 +129,7 @@ class VolumeInfo:
         #: *(optional)*
         self.posix_path = posix_path
 
-        #: :class:`Alias` object pointing at the disk image on which the
+        #: [`Alias`][mac_alias.Alias] object pointing at the disk image on which the
         #: target's volume resides *(optional)*
         self.disk_image_alias = disk_image_alias
 
@@ -299,7 +299,7 @@ class Alias:
         target=None,
         extra=None,
     ):
-        """Construct a new :class:`Alias` object with the specified
+        """Construct a new [`Alias`][mac_alias.Alias] object with the specified
         contents."""
 
         #: Application specific information (four byte byte-string)
@@ -310,10 +310,10 @@ class Alias:
         #: Version (we support versions 2 and 3)
         self.version = version
 
-        #: A :class:`VolumeInfo` object describing the target's volume
+        #: A [`VolumeInfo`][mac_alias.VolumeInfo] object describing the target's volume
         self.volume = volume
 
-        #: A :class:`TargetInfo` object describing the target
+        #: A [`TargetInfo`][mac_alias.TargetInfo] object describing the target
         self.target = target
 
         #: A list of extra `(tag, value)` pairs
@@ -457,13 +457,13 @@ class Alias:
 
     @classmethod
     def from_bytes(cls, bytes):
-        """Construct an :class:`Alias` object given binary Alias data."""
+        """Construct an [`Alias`][mac_alias.Alias] object given binary Alias data."""
         with io.BytesIO(bytes) as b:
             return cls._from_fd(b)
 
     @classmethod
     def for_file(cls, path):
-        """Create an :class:`Alias` that points at the specified file."""
+        """Create an [`Alias`][mac_alias.Alias] that points at the specified file."""
         if sys.platform != "darwin":
             raise RuntimeError("Not implemented (requires special support)")
 
@@ -750,7 +750,7 @@ class Alias:
         b.write(struct.pack(b">h", blen))
 
     def to_bytes(self):
-        """Returns the binary representation for this :class:`Alias`."""
+        """Returns the binary representation for this [`Alias`][mac_alias.Alias]."""
         with io.BytesIO() as b:
             self._to_fd(b)
             return b.getvalue()
