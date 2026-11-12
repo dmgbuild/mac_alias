@@ -1,6 +1,4 @@
-# mac_alias - Generate/parse Mac OS Alias records from Python
-
-This document refers to version {{ release }}.
+# mac_alias {{ release }}
 
 ## What is this?
 

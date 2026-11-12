@@ -13,7 +13,7 @@ exclude_docs = """
 __pycache__/
 """
 nav = [
-  { "Home" = "index.md" },
+  { "mac_alias (v{{ release }})" = "index.md" },
   { "Code Documentation" = [
     "mac_alias.md",
   ] },
